@@ -1,0 +1,63 @@
+.privat-policy {
+  max-width: 820px;
+  width: 100%;
+  margin: 0 auto;
+
+  h2 {
+    font-family: var(--font-family);
+    font-weight: 900;
+    font-size: 20px;
+    color: var(--1);
+
+  }
+
+  ol.list {
+    margin-top: 30px;
+
+    li.list__item {
+      list-style-position: inside;
+      list-style-type: decimal;
+      margin-bottom: 20px;
+
+      span {
+        text-indent: 20px;
+        font-family: var(--font-family);
+        font-weight: 400;
+        font-size: 16px;
+        color: var(--1);
+      }
+
+      .desciption {
+        margin-top: 20px;
+
+        p {
+          text-indent: 20px;
+          font-family: var(--font-family);
+          font-weight: 400;
+          font-size: 16px;
+          color: var(--1);
+
+          strong {
+            font-weight: 700;
+          }
+        }
+
+        ul.list-content {
+          margin: 10px 0;
+          list-style-type: disc;
+          display: flex;
+          flex-direction: column;
+
+          // gap: 10px;
+          li {
+            text-indent: 20px;
+            font-family: var(--font-family);
+            font-weight: 400;
+            font-size: 16px;
+            color: var(--1);
+          }
+        }
+      }
+    }
+  }
+}

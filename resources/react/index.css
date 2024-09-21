@@ -1,0 +1,37 @@
+@font-face {
+  font-family: 'Gotham';
+  src: url('/fonts/gotham_book.otf') format('otf');
+
+}
+
+
+
+:root {
+  --1: #312e30;
+  --2: #f44;
+  --3: #929292;
+
+  --font-family: "Gotham", sans-serif;
+}
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+.not-found{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: var(--font-family);
+  font-weight: 900;
+  font-size: 56px;
+  color: var(--1);
+}
