@@ -22,21 +22,7 @@ class UserController
 
     try {
       $user = User::create($request->all());
-      // $phone = $request->phone;
-      // $email = $request->email;
-      // $userPhone = User::where('phone', $phone)->first();
-      // $userEmail = User::where('email', $email)->first();
-      // if ($userPhone) {
-      //   $userPhone->update([
-      //     'phone' => $phone,
-      //   ]);
-      // }
 
-      // if ($userEmail) {
-      //   $userEmail->update([
-      //     'email' => $email,
-      //   ]);
-      // }
 
 
 

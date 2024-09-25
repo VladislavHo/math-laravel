@@ -8,6 +8,7 @@ import Questionnaire from './components/Questionnaire/Questionnaire.tsx'
 import Article from './components/Article/Article.tsx'
 import CalendarWrapper from './components/Calendar/CalendarWrapper.tsx'
 import RecordCheck from './components/RecordCheck/RecordCheck.tsx'
+import PayStripe from './components/PaymentFormStripe/PayStripe.tsx'
 
 
 
@@ -29,11 +30,11 @@ const router = createBrowserRouter([
   },
   {
     path: '/:user_id/questionnaire',
-    element: <Questionnaire/>,
+    element: <Questionnaire />,
   },
   {
     path: '/:user_id/article/',
-    element: <Article/>,
+    element: <Article />,
   },
   {
     path: '/calendar',
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: '/record-check',
     element: <RecordCheck />,
+  },
+  {
+    path: '/pay-stripe',
+    element: <PayStripe/>
   }
 
 ])

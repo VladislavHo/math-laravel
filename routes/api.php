@@ -23,6 +23,9 @@ Route::get("/appointments", [AppointmentController::class, 'index']);
 
 
 Route::post('/payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+Route::post('/payment/create-stripe', [PaymentController::class, 'createPaymentStripe'])->name('payment.createStripe');
+Route::post('/payment/checked-stripe', [PaymentController::class, 'checkedPaymentStripe'])->name('payment.checkedStripe');
+
 Route::get('/payment/success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment/home', [PaymentController::class, 'home'])->name('payment.home');
 Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');

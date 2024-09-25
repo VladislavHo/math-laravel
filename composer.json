@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "phpmailer/phpmailer": "^6.9",
         "ramsey/uuid": "^4.7",
+        "stripe/stripe-php": "^15.10",
         "yoomoney/yookassa-sdk-php": "^3.6"
     },
     "require-dev": {

@@ -9,21 +9,26 @@ export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPaym
   const navigate = useNavigate()
 
   async function handleSendPay() {
-    console.log(userID, 'userID');
     const {url, id, payment_id} = await pay(userID)
-    
     localStorage.setItem('id', id)
     localStorage.setItem('payment_id', payment_id)
-
+    localStorage.setItem('paymethod', "yookassa")
     if (url) {
       setUrlForPay(url);
+
     } else {
       console.error('Error: pay API call returned undefined');
     }
   }
 
+  function handleSendPayStripe(){
+    localStorage.setItem('paymethod', "stripe")
+    navigate(`/pay-stripe?${userID}`)
+  }
+
 
   useEffect(() => {
+    localStorage.setItem('paymethod', "dontknow")
     if (urlForPay) {
       // Optional: Validate the URL if needed
       try {
@@ -45,14 +50,19 @@ export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPaym
               просим оплатить тестирование в размере 25евро</p>
             {/* <a href="/pay">Оплатить</a> */}
             <button onClick={handleSendPay}>YooMooney</button>
-            <button onClick={handleSendPay}>Stripe</button>
+            <button onClick={handleSendPayStripe}>Stripe</button>
           </>
         ) : (
           <>
             <p className='answer_popup--text'>Спасибо большое! Мы
               предложим вам даты тестирования и
               консультации</p>
-            <a href="/calendar">Записаться на тестирование и консультацию</a>
+            {/* <a href="/calendar">Записаться на тестирование и консультацию</a> */
+            }
+            <button onClick={() => {
+              navigate('/calendar')
+              localStorage.setItem('record', 'true')
+            }}>Записаться на тестирование и консультацию</button>
           </>
         )}
                   <>
@@ -61,7 +71,7 @@ export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPaym
               просим оплатить тестирование в размере 25евро</p>
             {/* <a href="/pay">Оплатить</a> */}
             <button onClick={handleSendPay}>YooMooney</button>
-            <button onClick={handleSendPay}>Stripe</button>
+            <button onClick={handleSendPayStripe}>Stripe</button>
           </>
       </div>
     </div>

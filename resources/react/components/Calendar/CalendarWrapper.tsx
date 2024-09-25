@@ -9,7 +9,8 @@ import UserStore from '../../store/user_store';
 import DateStore from '../../store/date_store';
 import AnswerPopupCalendar from '../AnswerPopupCalendar/AnswerPopupCalendar';
 // import { useNavigate } from 'react-router-dom';
-import { checkPayment } from '../../api/payApi';
+import { checkPayment, checkPaymentStripe } from '../../api/payApi';
+import { useNavigate } from 'react-router-dom';
 
 
 type ValuePiece = Date | null;
@@ -17,10 +18,10 @@ type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const CalendarWrapper = observer(() => {
-  // const navigation = useNavigate()
-  // const record = localStorage.getItem('record');
+  const navigation = useNavigate()
   const user_id = localStorage.getItem('id') ?? '';
   const payment_id = localStorage.getItem('payment_id') ?? '';
+  const paymethod = localStorage.getItem('paymethod') ?? '';
   const { addedWithUserAppointmentActions } = UserStore
   const { getDatesActions, dateAppointement } = DateStore
 
@@ -31,36 +32,37 @@ const CalendarWrapper = observer(() => {
 
 
   useEffect(() => {
+
+    if(!paymethod){
+      navigation('/')
+    }
+
+
     const moundhPonel = document.querySelector(".react-calendar__navigation__label");
     moundhPonel?.setAttribute('disabled', 'true');
-    localStorage.getItem('id')
+    // localStorage.getItem('id')
 
     // getDatesActions()
 
 
-    
+
     getDatesActions()
 
 
 
+    if (!!String(user_id) && !!String(payment_id)) {
+      checkPayment(user_id, payment_id)
+    }
 
-    checkPayment(user_id, payment_id)
+    if(!!String(user_id) && !!String(paymethod) && paymethod === 'stripe') {
+      checkPaymentStripe({userID: user_id})
+    }
 
     // if (record) {
     //   navigation('/record-check')
     // }
     // console.log(dateAppointement)
   }, [])
-
-
-  useEffect(() => {
-
-
-  }, [])
-
-
-
-
 
 
 
@@ -128,7 +130,7 @@ const CalendarWrapper = observer(() => {
         <h2>Спасибо большое! Выберите, пожалуйста, удобную дату</h2>
 
       </div>
-      
+
       <Calendar
 
         onClickDay={onClickDay}

@@ -1,6 +1,5 @@
 <?php
 
-// namespace App\Http\Controllers\UserController;
 namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\ScheduledEmailModel;
@@ -9,7 +8,6 @@ use Illuminate\Http\Request;
 use Log;
 use Carbon\Carbon;
 use App\Mail\User\SendMail;
-// use App\Mail\ScheduledEmail;
 use Mail;
 class AppointmentController
 {
@@ -41,14 +39,12 @@ class AppointmentController
       $timeCarbon = Carbon::createFromFormat('H:i', $request->time)->subHour();
       $sendAt = $date->copy()->setTime($timeCarbon->hour, $timeCarbon->minute)->subHours(1)->toDateTimeString();
   
-      // Создание записи о запланированной электронной почте
       $scheduleEmail = new ScheduledEmailModel();
       $scheduleEmail->recipient = $user->email;
       $scheduleEmail->message = 'Message';
       $scheduleEmail->send_at = Carbon::parse($sendAt)->toDateTimeString();
       $scheduleEmail->save();
   
-      // Отправка электронной почты
       try {
           Mail::to($user->email)->send(new SendMail($request));
       } catch (\Exception $e) {
@@ -59,14 +55,11 @@ class AppointmentController
       $appointment = Appointment::create([
           'date' => $date,
           'time' => $request->time,
-          'user_id' => $user->id // Используем существующий ID
+          'user_id' => $user->id //
       ]);
   
-      // Обновление пользователя с appointment_id
       User::where('id', $user->id)->update(['send_at' => $sendAt]);
-  
-      // Сохранение связи между пользователем и встречей
-      // $user->appointments()->save($appointment);
+
 
       $appointment->user()->associate($user);
       $appointment->save();
