@@ -1,0 +1,43 @@
+@import './calc-between-width.scss';
+
+@mixin sizeTextPIntro() {
+  font-size: 16px;
+  @media screen and (max-width: 820px) {
+    font-size: calc-between-width(1200, 16, 480, 12);
+    
+  }
+
+}
+
+@mixin sizeTextH2Intro() {
+  font-size: 24px;
+  @media screen and (max-width: 820px) {
+    font-size: calc-between-width(1200, 24, 480, 14);
+    
+  }
+}
+
+@mixin sizeTextH2() {
+  font-size: 20px;
+  @media screen and (max-width: 820px) {
+    font-size: calc-between-width(1200, 20, 480, 16);
+    
+  }
+}
+
+@mixin sizeTextP() {
+  font-size: 16px.5;
+  @media screen and (max-width: 820px) {
+    font-size: calc-between-width(1200, 16.5, 480, 14.5);
+    
+  }
+
+}
+
+@mixin sizeTextPSmall() {
+  font-size: 15px;
+  @media screen and (max-width: 820px) {
+    font-size: calc-between-width(1200, 15, 480, 12);
+    
+  }
+}

@@ -1,6 +1,7 @@
 @font-face {
   font-family: 'Gotham';
-  src: url('/fonts/gotham_book.otf') format('otf');
+  /* src: url('./fonts/gotham_book.otf') format('otf'); */
+  src: url('./assets/fonts/Gotham/gotham_black.otf') format('otf');
 
 }
 

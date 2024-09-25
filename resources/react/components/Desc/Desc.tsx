@@ -25,7 +25,7 @@ export default function Desc() {
 
 
       <div className="link">
-        <a href="https://t.me/math_learn_v1_bot">
+      <a href="https://t.me/math_learn_v1_bot">
           <div className="logo">
             {<TelegramSvg />}
           </div>

@@ -6,6 +6,10 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import PrivacyPolicy from './components/PrivatPolicy/PrivacyPolicy.tsx'
 import Questionnaire from './components/Questionnaire/Questionnaire.tsx'
 import Article from './components/Article/Article.tsx'
+import CalendarWrapper from './components/Calendar/CalendarWrapper.tsx'
+import RecordCheck from './components/RecordCheck/RecordCheck.tsx'
+
+
 
 const router = createBrowserRouter([
   {
@@ -25,18 +29,28 @@ const router = createBrowserRouter([
   },
   {
     path: '/:user_id/questionnaire',
-    element: <Questionnaire />,
+    element: <Questionnaire/>,
   },
   {
-    path: '/:user_id/article',
+    path: '/:user_id/article/',
     element: <Article/>,
+  },
+  {
+    path: '/calendar',
+    element: <CalendarWrapper />,
+  },
+  {
+    path: '/record-check',
+    element: <RecordCheck />,
   }
 
 ])
 
-
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+
+
     <RouterProvider router={router} />
+
   </React.StrictMode>,
 )

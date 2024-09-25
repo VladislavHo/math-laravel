@@ -1,4 +1,5 @@
 
+
 import './App.css'
 import Desc from './components/Desc/Desc'
 import Intro from './components/Intro/Intro'
@@ -6,10 +7,15 @@ import Intro from './components/Intro/Intro'
 function App() {
 
 
+
+
   return (
     <>
-      <Intro />
-      <Desc />
+      <main className="home">
+        <Intro />
+        <Desc />
+      </main>
+
     </>
   )
 }

@@ -14,4 +14,11 @@ export default defineConfig({
         host: '0.0.0.0', // Allow access from external IPs
         port: 3000, // Change this if needed
     },
+    css: {
+        preprocessorOptions: {
+          scss: {
+            api: 'modern-compiler' // or "modern"
+          }
+        }
+      }
 });

@@ -4,30 +4,40 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('telegram_id');
             $table->string('name');
             $table->string('lastName');
-            $table->string('phone')->unique();
-            $table->string('email')->unique();
+            $table->string('phone');
+            $table->string('email');
             $table->string('tasks')->nullable();
             $table->string('deadline')->nullable();
             $table->string('plans')->nullable();
             $table->string('age')->nullable();
             $table->string('income')->nullable();
-
+            $table->boolean('is_pay')->default(false);
             $table->timestamp('email_verified_at')->nullable();
-            // $table->string('password');
+            // $table->uuid('appointment_id')->nullable(); 
+            $table->string('role')->default('user');
+
+
+            // $table->index('appointment_id', 'user_appointment_idx');
+            
+            // $table->foreign('appointment_id', 'user_appointment_fk')
+            //     ->references('id')->on('appointments');
+            $table->timestamp("send_at")->nullable();
+
             $table->rememberToken();
             $table->timestamps();
+
+
         });
 
         // telegram_id: string | undefined

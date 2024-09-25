@@ -6,17 +6,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-
+use Ramsey\Uuid\Uuid;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
+    protected $keyType = 'string'; // Указываем, что тип ключа — строка
+    public $incrementing = false;   // Отключаем автоинкремент
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
+        'id',
         'name',
         'lastName',
         'email',
@@ -27,10 +29,11 @@ class User extends Authenticatable
         'plans',
         'age',
         'income',
+        'appointment_id',
         'telegram_id',
-        
+
         // 'password',
-        
+
     ];
 
     /**
@@ -54,5 +57,19 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    public function appointments()
+    {
+        return $this->hasMany(Appointment::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            // Генерируем UUID перед созданием записи
+            $model->id = Uuid::uuid4()->toString();
+        });
     }
 }

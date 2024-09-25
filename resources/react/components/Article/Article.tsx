@@ -19,7 +19,7 @@ export default function Article() {
       <article className='article--intro'>
         {/* img */}
         <div className="img-wrapper">
-          <img src="../image/intro_article.png" alt="png" />
+          {/* <img src="../image/intro_article.png" alt="png" /> */}
         </div>
 
         <p>9 из 10 родителей детей и подростков, учащихся или желающих учиться в иностранных школах и университетах, понятия не имеют, как выбирать частного тьютора. </p>
@@ -132,8 +132,7 @@ export default function Article() {
         </div>
 
         <div className="about_education-insights">
-          <div className="img-wrapper">
-            <img src="../image/bg.png" alt="" />
+          <div className="img-bg">
           </div>
           <div className="about_education-insights--info">
             <p>
@@ -198,40 +197,44 @@ export default function Article() {
         <h3><strong>До и после: Grade F vs. Grade A</strong></h3>
         <p>Еще несколько актуальных кейсов</p>
         <p>Внизу приведена часть отзывов по работе с нами. В целях конфиденциальности имена учеников изменены.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Ученик</th>
-              <th>До</th>
-              <th>После</th>
-              <th>Страна</th>
-              <th>Отзыв</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Виктория</td>
-              <td>Правильно: 20%</td>
-              <td>Правильно: 60%</td>
-              <td>UK</td>
-              <td>Мама: «Без пушинга делает домашки. Для нас это результат»</td>
-            </tr>
-            <tr>
-              <td>Сергей</td>
-              <td>Оценка: F</td>
-              <td>Оценка: А</td>
-              <td>USA</td>
-              <td>Папа: «Повысил оценки. Есть результат»</td>
-            </tr>
-            <tr>
-              <td>София</td>
-              <td>Оценка: F</td>
-              <td>Оценка: А</td>
-              <td>Sweden</td>
-              <td>Студентка: «Очень благодарна: достигла того, что хотела»</td>
-            </tr>
-          </tbody>
-        </table>
+
+        <div className="table">
+          <table>
+            <thead>
+              <tr>
+                <th>Ученик</th>
+                <th>До</th>
+                <th>После</th>
+                <th>Страна</th>
+                <th>Отзыв</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Виктория</td>
+                <td>Правильно: 20%</td>
+                <td>Правильно: 60%</td>
+                <td>UK</td>
+                <td>Мама: «Без пушинга делает домашки. Для нас это результат»</td>
+              </tr>
+              <tr>
+                <td>Сергей</td>
+                <td>Оценка: F</td>
+                <td>Оценка: А</td>
+                <td>USA</td>
+                <td>Папа: «Повысил оценки. Есть результат»</td>
+              </tr>
+              <tr>
+                <td>София</td>
+                <td>Оценка: F</td>
+                <td>Оценка: А</td>
+                <td>Sweden</td>
+                <td>Студентка: «Очень благодарна: достигла того, что хотела»</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
       </article>
       <article className='article-consultation'>
         <div className="title">
