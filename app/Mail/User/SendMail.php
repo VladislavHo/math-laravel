@@ -3,26 +3,31 @@
 namespace App\Mail\User;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Carbon\Carbon;
+use Log;
 class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
     public $date;
     public $time;
 
+    public $userName;
     /**
      * Create a new message instance.
      */
-    public function __construct($request)
+    public function __construct($request, $name)
     {
         $formattedDate = Carbon::parse($request->date)->format('d.m.Y');
-        $this->date = $formattedDate;
+
+        $dateCarbonFormat = Carbon::createFromFormat('d.m.Y', $formattedDate)->locale('ru')->translatedFormat('j F Y');
+
+        $this->date = $dateCarbonFormat;
         $this->time = $request->time;
+        $this->userName = $name;
     }
 
     /**

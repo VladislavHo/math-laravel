@@ -9,6 +9,7 @@ use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
 use DefStudio\Telegraph\Keyboard\ReplyButton;
 use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
+use Log;
 class Handler extends WebhookHandler
 {
   public function calendar(): void
@@ -65,6 +66,12 @@ class Handler extends WebhookHandler
   public function start(): void
   {
 
+
+    $update = json_decode(file_get_contents('php://input'), true);
+    $message = $update['message'];
+
+
+    Log::info($message);
 
     $textHello = 'Добрый день! 
 
@@ -136,14 +143,10 @@ class Handler extends WebhookHandler
       $this->chat->html('Ошибка: ' . $data['description'])->send();
       return;
     }
-    \Log::info("Запрос URL: $urlChangeGroup");
-    \Log::info("Ответ API: $response");
 
-    // $hashId = hash('sha256', $userId);
-    // Проверяем статус пользователя
     if (isset($data['result']['status'])) {
       if (!ini_get('allow_url_fopen')) {
-        \Log::info('allow_url_fopen is not enabled');
+
       }
       $status = $data['result']['status'];
       if ($status === 'member' || $status === 'administrator' || $status === 'creator') {

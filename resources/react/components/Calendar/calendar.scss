@@ -79,4 +79,38 @@
   .react-calendar__tile--now {
     background-color: #f1f692;
   }
+
+  //select
+
+
+}
+
+.time {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+  font-family: Arial, sans-serif;
+
+  label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+
+  select {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+
+    &:focus {
+      border-color: #333;
+      outline: none;
+    }
+
+    option {
+      padding: 0.5rem;
+    }
+  }
 }

@@ -6,6 +6,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Mail\User\SendMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TelegramController;
 
 
 
@@ -17,9 +18,13 @@ Route::get("/appointments-userid", [UserController::class, 'getAppointmentsByUse
 
 
 Route::put("/users/{id}/update", [AppointmentController::class, 'create']);
+
+
 Route::post("/users/dates", [AppointmentController::class, 'storeDates']);
 Route::get("/appointments", [AppointmentController::class, 'index']);
 
+
+Route::post("/sendmessage", [TelegramController::class, 'sendMessageToUser']);
 
 
 Route::post('/payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');

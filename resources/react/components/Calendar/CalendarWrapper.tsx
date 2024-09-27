@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 
 import 'react-calendar/dist/Calendar.css';
 import './calendar.scss';
-import { MAX_CALENDAR_DATE } from '../../var/var';
+import { MAX_CALENDAR_DATE } from '../../config/config';
 import { observer } from 'mobx-react-lite';
 import UserStore from '../../store/user_store';
 import DateStore from '../../store/date_store';
@@ -11,6 +11,7 @@ import AnswerPopupCalendar from '../AnswerPopupCalendar/AnswerPopupCalendar';
 // import { useNavigate } from 'react-router-dom';
 import { checkPayment, checkPaymentStripe } from '../../api/payApi';
 import { useNavigate } from 'react-router-dom';
+import { TelegramSendMessage } from '../../api/telegramApi';
 
 
 type ValuePiece = Date | null;
@@ -40,11 +41,6 @@ const CalendarWrapper = observer(() => {
 
     const moundhPonel = document.querySelector(".react-calendar__navigation__label");
     moundhPonel?.setAttribute('disabled', 'true');
-    // localStorage.getItem('id')
-
-    // getDatesActions()
-
-
 
     getDatesActions()
 
@@ -58,10 +54,6 @@ const CalendarWrapper = observer(() => {
       checkPaymentStripe({userID: user_id})
     }
 
-    // if (record) {
-    //   navigation('/record-check')
-    // }
-    // console.log(dateAppointement)
   }, [])
 
 
@@ -87,6 +79,11 @@ const CalendarWrapper = observer(() => {
   };
 
   function handleClickSubmit(date: Date) {
+    
+
+    localStorage.removeItem('paymethod')
+
+  
     handleClickAppointment(date)
 
     setIsOpenPopap(true)
@@ -99,6 +96,7 @@ const CalendarWrapper = observer(() => {
   async function handleClickAppointment(value: Date) {
     try {
       await addedWithUserAppointmentActions({ date: value, time: selectedTime })
+      await TelegramSendMessage({ date: value, time: selectedTime, user_id })
     } catch (error) {
       console.log(error)
     }

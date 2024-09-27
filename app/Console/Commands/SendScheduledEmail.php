@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ScheduledEmail as Mailable;
 use App\Models\ScheduledEmailModel ;
-
+use App\Models\User;
 class SendScheduledEmail extends Command
 {
     protected $signature = 'send:scheduled-email';
@@ -17,7 +17,7 @@ class SendScheduledEmail extends Command
         $emails = ScheduledEmailModel::where('send_at', '<=', now())->get(); 
         $this->info('Команда send:scheduled-email была вызвана');
         foreach ($emails as $email) {
-            Mail::to($email->recipient)->send(new Mailable());
+            Mail::to($email->recipient)->send(new Mailable($email -> recipient));
             $email->delete(); 
         }
 

@@ -8,20 +8,20 @@ import { useEffect, useState } from "react";
 import AnswerPopupQuestionnaire from "../AnswerPopupQuestionnaire/AnswerPopupQuestionnaire";
 import { observer } from "mobx-react-lite";
 import UserStore from "../../store/user_store";
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 
 const Questionnaire = observer(() => {
-  const navigation = useNavigate()
-  const record = localStorage.getItem('record');
+  // const navigation = useNavigate()
+  // const record = localStorage.getItem('record');
   const { createUserActions, userData } = UserStore
   const [isActive, setIsActive] = useState(false);
   const [isPayment, setIsPayment] = useState(false); //false
 
-  useEffect(() => {
-    if (record) {
-      navigation('/record-check')
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (record) {
+  //     navigation('/record-check')
+  //   }
+  // }, [])
 
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const Questionnaire = observer(() => {
           Это займет всего 5 минут вашего времени. Ответы помогут понять, как наша команда сможет вам помочь в достижении ваших учебных целей по математике и программированию на западе и подготовить материал для теста. Пожалуйста, проявите искренность и открытость.
         </p>
 
-        <p className="description-field--info">Поля обязательны к заполнению</p>
+        <p className="description-field--info">Поля обязательны к заполнению *</p>
         <form onSubmit={handleSubmit(onSubmit)}>
 
           <div className="name-field field">
@@ -65,7 +65,7 @@ const Questionnaire = observer(() => {
             </label>
             <input
               type="text"
-              {...register('name', { required: 'Это поле обязательно', minLength: 3, maxLength: 30, pattern: /^[a-zA-Zа-яА-Я]+$/i })}
+              {...register('name', { required: 'Это поле обязательно', minLength: 2, maxLength: 15, pattern: /^[a-zA-Zа-яА-Я]+$/i })}
               placeholder="Поле ввода"
             />
             {errors.name && <span className="error-message">{errors.name.message}</span>}
@@ -77,7 +77,7 @@ const Questionnaire = observer(() => {
             </label>
             <input
               type="text"
-              {...register('lastName', { required: 'Это поле обязательно', minLength: 3, maxLength: 30, pattern: /^[a-zA-Zа-яА-Я]+$/i })}
+              {...register('lastName', { required: 'Это поле обязательно', minLength: 2, maxLength: 15, pattern: /^[a-zA-Zа-яА-Я]+$/i })}
               placeholder="Поле ввода"
             />
             {errors.lastName && <span className="error-message">{errors.lastName.message}</span>}
@@ -107,7 +107,7 @@ const Questionnaire = observer(() => {
           <div className="email-field field">
             <label className="label-title">Электронная почта*</label>
             <input
-              {...register('email', { required: 'Это поле обязательно', minLength: 10, maxLength: 30, pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i })}
+              {...register('email', { required: 'Это поле обязательно', minLength: 8, maxLength: 30, pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i })}
               type="email"
               placeholder="Поле ввода"
             />
@@ -118,7 +118,7 @@ const Questionnaire = observer(() => {
             <label className="label-title">Какие задачи в области математики и программирования стоят на данный момент?*</label>
             <input
               type="text"
-              {...register('tasks', { required: 'Это поле обязательно', minLength: 3, maxLength: 30 })}
+              {...register('tasks', { required: 'Это поле обязательно', minLength: 3, maxLength: 50 })}
               placeholder="Поле ввода"
             />
             {errors.tasks && <span className="error-message">{errors.tasks.message}</span>}
@@ -128,7 +128,7 @@ const Questionnaire = observer(() => {
             <label className="label-title">В какой срок необходимо решить задачи предыдущего пункта?*</label>
             <input
               type="text"
-              {...register('deadline', { required: 'Это поле обязательно', minLength: 3, maxLength: 30 })}
+              {...register('deadline', { required: 'Это поле обязательно', minLength: 3, maxLength: 50 })}
               placeholder="Поле ввода"
             />
             {errors.deadline && <span className="error-message">{errors.deadline.message}</span>}
@@ -138,7 +138,7 @@ const Questionnaire = observer(() => {
             <label className="label-title">Дальнейшие академические и карьерные планы для вашего ребенка</label>
             <input
               type="text"
-              {...register('plans', { required: 'Это поле обязательно', minLength: 3, maxLength: 30 })}
+              {...register('plans', { required: 'Это поле обязательно', minLength: 3, maxLength: 50 })}
               placeholder="Поле ввода"
             />
             {errors.plans && <span className="error-message">{errors.plans.message}</span>}
@@ -183,12 +183,12 @@ const Questionnaire = observer(() => {
           </div>
 
           <div className="income-field field">
-            <label className="label-title">Ваш доход в месяц, USD*</label>
+            <label className="label-title">Ваш доход в месяц, USD</label>
             <label>
               <input
                 type="radio"
                 value="500 и меньше"
-                {...register('income', { required: 'Это поле обязательно' })}
+                {...register('income')}
               />
               $500 и меньше
             </label>
@@ -196,7 +196,7 @@ const Questionnaire = observer(() => {
               <input
                 type="radio"
                 value="1501-3000"
-                {...register('income', { required: 'Это поле обязательно' })}
+                {...register('income')}
               />
               $1501-$3000
             </label>
@@ -204,7 +204,7 @@ const Questionnaire = observer(() => {
               <input
                 type="radio"
                 value="3001-5000"
-                {...register('income', { required: 'Это поле обязательно' })}
+                {...register('income')}
               />
               $3001-$5000
             </label>
@@ -212,7 +212,7 @@ const Questionnaire = observer(() => {
               <input
                 type="radio"
                 value="5001-10000"
-                {...register('income', { required: 'Это поле обязательно' })}
+                {...register('income')}
               />
               $5001-$10000
             </label>
@@ -220,12 +220,12 @@ const Questionnaire = observer(() => {
               <input
                 type="radio"
                 value="свыше 10000"
-                {...register('income', { required: 'Это поле обязательно' })}
+                {...register('income')}
               />
               Свыше $10000
             </label>
 
-            {errors.income && <span className="error-message">{errors.income.message}</span>}
+            {/* {errors.income && <span className="error-message">{errors.income.message}</span>} */}
           </div>
 
           <div className="investment-field field">

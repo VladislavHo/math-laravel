@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './answer_popup_questionnaire.scss'
 import { useNavigate } from 'react-router-dom'
-import {pay} from '../../api/payApi'
+import { pay } from '../../api/payApi'
 
 export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPayment: boolean, userID: string | null }) {
   const [urlForPay, setUrlForPay] = useState('')
@@ -9,7 +9,7 @@ export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPaym
   const navigate = useNavigate()
 
   async function handleSendPay() {
-    const {url, id, payment_id} = await pay(userID)
+    const { url, id, payment_id } = await pay(userID)
     localStorage.setItem('id', id)
     localStorage.setItem('payment_id', payment_id)
     localStorage.setItem('paymethod', "yookassa")
@@ -21,7 +21,7 @@ export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPaym
     }
   }
 
-  function handleSendPayStripe(){
+  function handleSendPayStripe() {
     localStorage.setItem('paymethod', "stripe")
     navigate(`/pay-stripe?${userID}`)
   }
@@ -65,14 +65,6 @@ export default function AnswerPopupQuestionnaire({ isPayment, userID }: { isPaym
             }}>Записаться на тестирование и консультацию</button>
           </>
         )}
-                  <>
-            <p className='answer_popup--text'>Спасибо за запись. Для разработки
-              индивидуального плана занятий только для вашего ребенка
-              просим оплатить тестирование в размере 25евро</p>
-            {/* <a href="/pay">Оплатить</a> */}
-            <button onClick={handleSendPay}>YooMooney</button>
-            <button onClick={handleSendPayStripe}>Stripe</button>
-          </>
       </div>
     </div>
   )

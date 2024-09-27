@@ -1,4 +1,4 @@
-import { SERVER_SITE } from "../var/var";
+import { SERVER_SITE } from "../config/config";
 
 export async function pay(userID: string | null) {
   try {

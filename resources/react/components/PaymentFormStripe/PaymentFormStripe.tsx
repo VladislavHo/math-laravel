@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 // import {CardElement,PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import {PaymentElement } from '@stripe/react-stripe-js';
 import { Stripe, StripeElements } from '@stripe/stripe-js';
-import {SERVER_SITE} from "../../var/var";
+import {SERVER_SITE} from "../../config/config";
 import './payment--stripe.scss';
 
 

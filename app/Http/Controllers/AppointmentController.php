@@ -11,7 +11,9 @@ use App\Mail\User\SendMail;
 use Mail;
 class AppointmentController
 {
-  //
+  protected $telegramController;
+
+
 
   public function index()
   {
@@ -27,11 +29,14 @@ class AppointmentController
   public function create(Request $request)
   {
       // Проверка существования пользователя
+      // $telegramController = new TelegramController();
       $user = User::find($request->id);
       if (!$user) {
           return response()->json(['error' => 'User not found'], 404);
       }
   
+
+      $name = $user->name;
       // Установка временной зоны и даты
       $date = Carbon::parse($request->date)->setTimezone('Europe/Moscow');
   
@@ -42,11 +47,12 @@ class AppointmentController
       $scheduleEmail = new ScheduledEmailModel();
       $scheduleEmail->recipient = $user->email;
       $scheduleEmail->message = 'Message';
-      $scheduleEmail->send_at = Carbon::parse($sendAt)->toDateTimeString();
+      // $scheduleEmail->send_at = Carbon::parse($sendAt)->toDateTimeString();
+      $scheduleEmail->send_at = Carbon::now()->addMinutes(1)->toDateTimeString();
       $scheduleEmail->save();
   
       try {
-          Mail::to($user->email)->send(new SendMail($request));
+          Mail::to($user->email)->send(new SendMail($request,  $name));
       } catch (\Exception $e) {
           return response()->json(['error' => 'Failed to send email: ' . $e->getMessage()], 500);
       }
