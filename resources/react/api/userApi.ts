@@ -40,6 +40,9 @@ export async function addedWithUserAppointment({id, date, time}: {id: string, da
 
     return data
   } catch (error) {
-    console.log(error)
+    return {
+      success: false,
+      error: error
+    }
   }
 }

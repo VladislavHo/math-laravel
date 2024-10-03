@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ScheduledEmail as Mailable;
 use App\Models\ScheduledEmailModel ;
-use App\Models\User;
+use App\Services\ScheduledTelegram ;
 class SendScheduledEmail extends Command
 {
     protected $signature = 'send:scheduled-email';
@@ -15,9 +15,17 @@ class SendScheduledEmail extends Command
     public function handle()
     {
         $emails = ScheduledEmailModel::where('send_at', '<=', now())->get(); 
+        // $telegramSendMessage = new ScheduledTelegram();
         $this->info('Команда send:scheduled-email была вызвана');
         foreach ($emails as $email) {
             Mail::to($email->recipient)->send(new Mailable($email -> recipient));
+
+
+            (new ScheduledTelegram())->sendMessage($email->recipient);
+            // $telegramSendMessage->sendMessage($email->recipient);
+            // $telegram = new ScheduledTelegram();
+            // $telegram->sendMessage($email->recipient);
+            
             $email->delete(); 
         }
 

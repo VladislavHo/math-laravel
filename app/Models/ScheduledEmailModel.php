@@ -10,8 +10,8 @@ class ScheduledEmailModel extends Model
     use HasFactory;
     protected $table = 'scheduled_emails';
     protected $fillable = [
-        'recipient', // Email получателя
-        'message',   // Содержимое сообщения
-        'send_at',   // Дата и время отправки
+        'recipient', 
+        'message',   
+        'send_at',   
     ];
 }

@@ -6,7 +6,10 @@
 <body>
 <main>
     <p>Добрый день, {{$userName}} !</p><br>
-    <img src="{{ asset('images/photo_2024-09-27_11-30-32.jpg') }}" alt="Описание изображения" style="max-width: 100%; height: auto;">
+    <div class="image--container" style="max-width: 100%; display: flex;align-items: center;justify-content: center">
+        <img src="https://github.com/VladislavHo/math-laravel/blob/main/resources/images/photo_2024-09-27_11-30-32.jpg?raw=true" style="border-radius: 10px" alt="img" style="max-width:400px; height: auto;">
+
+    </div>
 
 
     <p>Уже через 1 час мы встречаемся с вами и вашим ребенком для того, чтобы:</p>
@@ -28,7 +31,7 @@
 
 
     <p>До встречи🤗</p>
-    <p>Команда MathHelp</p>
+    <p>Команда MathPad</p>
 
 
 

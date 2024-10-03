@@ -68,10 +68,18 @@ class Handler extends WebhookHandler
 
 
     $update = json_decode(file_get_contents('php://input'), true);
-    $message = $update['message'];
-
-
-    Log::info($message);
+    // $message = $update['message'];
+    if (isset($update['callback_query'])) {
+      $callbackQuery = $update['callback_query'];
+      $userId = $callbackQuery['from']['id']; 
+    } else if (isset($update['message'])) {
+      $message = $update['message'];
+      $userId = $message['from']['id']; 
+    } else {
+      $this->chat->html('Нет информации о пользователе.')->send();
+      return;
+    }
+    Log::info('User ID: ' . $userId);
 
     $textHello = 'Добрый день! 
 
@@ -80,14 +88,13 @@ class Handler extends WebhookHandler
 
     $this->chat->html($textHello)->keyboard(Keyboard::make()->buttons([
       Button::make('Подписаться!')->url('https://t.me/foreignmath'),
-      // Button::make('Это тестовый канал')->url('https://t.me/test_chanel_for_testing'),
-      // Button::make('Проверить подписку')->action("change"),
+
     ]))->send();
 
 
     sleep(1);
     $this->chat->html('Давай проверим подписку?')->keyboard(Keyboard::make()->buttons([
-      // Button::make('Это тестовый канал')->url('https://t.me/test_chanel_for_testing'),
+ 
       Button::make('Проверить подписку')->action("change"),
     ]))->send();
 
@@ -106,30 +113,27 @@ class Handler extends WebhookHandler
 
   public function change(): void
   {
-    // Получаем обновление от Telegram
+  
     $update = json_decode(file_get_contents('php://input'), true);
     $app_url = env('APP_URL');
-    \Log::info('app_url: ' . $app_url);
-    // Проверяем, есть ли сообщение
+
     if (isset($update['callback_query'])) {
       $callbackQuery = $update['callback_query'];
-      $userId = $callbackQuery['from']['id']; // ID пользователя из callback_query
+      $userId = $callbackQuery['from']['id']; 
     } else if (isset($update['message'])) {
       $message = $update['message'];
-      $userId = $message['from']['id']; // ID пользователя из сообщения
+      $userId = $message['from']['id']; 
     } else {
       $this->chat->html('Нет информации о пользователе.')->send();
       return;
     }
 
-    // Получаем токен из конфигурации
+
     $token = env('TELEGRAM_TOKEN');
     $changeGroup = '@foreignmath';
-    // Формируем URL для запроса
-    $urlChangeGroup = "https://api.telegram.org/bot$token/getChatMember?chat_id=$changeGroup&user_id=$userId";
-    // $urlChangeGroup = "https://api.telegram.org/bot$token/getChatMember?chat_id=@test_chanel_for_testing&user_id=$userId";
 
-    // Отправляем запрос и получаем ответ
+    $urlChangeGroup = "https://api.telegram.org/bot$token/getChatMember?chat_id=$changeGroup&user_id=$userId";
+
     try {
       $response = file_get_contents($urlChangeGroup);
       $data = json_decode($response, true);

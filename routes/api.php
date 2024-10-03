@@ -3,8 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppointmentController;
-use App\Mail\User\SendMail;
-use Illuminate\Http\Request;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TelegramController;
 
@@ -25,6 +23,7 @@ Route::get("/appointments", [AppointmentController::class, 'index']);
 
 
 Route::post("/sendmessage", [TelegramController::class, 'sendMessageToUser']);
+Route::post("/checktelegram", [TelegramController::class, 'checkTelegram']);
 
 
 Route::post('/payment/create', [PaymentController::class, 'createPayment'])->name('payment.create');

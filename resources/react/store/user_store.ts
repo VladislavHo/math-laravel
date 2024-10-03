@@ -19,6 +19,8 @@ class UserStore {
     income: '',
   }
 
+  errorUserData: boolean = false
+
   constructor() {
     makeAutoObservable(this);
   }
@@ -31,8 +33,6 @@ class UserStore {
       const userResponse = await createUser(userDate)
 
 
-      console.log(userResponse)
-
       runInAction(() => {
         this.userData = userResponse.data
         localStorage.setItem('id', userResponse.data.id ?? '')
@@ -42,7 +42,7 @@ class UserStore {
       console.log(this.userData);
 
     } catch (error) {
-      console.log(error)
+      this.errorUserData = true
     }
   }
 
@@ -58,7 +58,7 @@ class UserStore {
       })
       console.log(userResponse);
     } catch (error) {
-      console.log(error)
+      this.errorUserData = true
     }
   }
 }

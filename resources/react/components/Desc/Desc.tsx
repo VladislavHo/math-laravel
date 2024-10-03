@@ -1,6 +1,12 @@
 import "./desc.scss"
 import { TelegramSvg } from '../Svg/Svg'
+import { useState } from "react";
 export default function Desc() {
+  const [isChecked, setIsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setIsChecked(!isChecked);
+  };
   return (
     <section className='desc'>
       <h2>Методика достижения целей по математике в западных школах: дорога к поступлению в  Оксфорд</h2>
@@ -18,21 +24,32 @@ export default function Desc() {
 
       <div className="agreement">
         <label>
-          <input type="checkbox" required />
+          <input
+            checked={isChecked} onChange={handleCheckboxChange} type="checkbox" required />
           Я соглашаюсь с условиями <a href="/privacy-policy" target="_blank">Политика конфиденциальности</a>
         </label>
       </div>
 
 
       <div className="link">
-      <a href="https://t.me/math_learn_v1_bot">
+        {/* <a href="https://t.me/math_learn_v1_bot">
           <div className="logo">
             {<TelegramSvg />}
           </div>
           <div className="title">
             <p>Telegram</p>
           </div>
-        </a>
+        </a> */}
+
+
+        <button disabled={!isChecked} onClick={() => window.open('https://t.me/math_learn_v1_bot', '')}>
+          <div className="logo">
+            {<TelegramSvg />}
+          </div>
+          <div className="title">
+            <p>Telegram</p>
+          </div>
+        </button>
       </div>
     </section>
   )

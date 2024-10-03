@@ -7,8 +7,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
-use Log;
 use Carbon\Carbon;
+use Log;
+
+
 
 class TelegramController extends Controller
 {
@@ -22,10 +24,9 @@ class TelegramController extends Controller
 
     $dateFormat = date('d.m.Y', strtotime($date));
     $dateCarbonFormat = Carbon::createFromFormat('d.m.Y', $dateFormat)->locale('ru')->translatedFormat('j F Y');
-    ;
     $timeFormat = date('H:i', strtotime($time));
 
-
+    Log::info('telegram' . $dateCarbonFormat);
 
     $user = User::find($userId);
 
@@ -34,7 +35,7 @@ class TelegramController extends Controller
 
     $message = 'Добрый день,  ' . $name . '! 
 
-Спасибо на тестирование и консультацию в команду инновационного проекта MathHelp🤗, который позволяет гарантированно достигать академических целей на западе за счет использования научных знаний и инновационных AI решений.
+Спасибо за тестирование и консультацию в команду инновационного проекта MathPad🤗, который позволяет гарантированно достигать академических целей на западе за счет использования научных знаний и инновационных AI решений.
 
 Вы записались к нам на встречу ' . $dateCarbonFormat . ' в ' . $timeFormat . '. 
 
@@ -47,7 +48,7 @@ class TelegramController extends Controller
 Мы пришлем Вам ссылку на встречу в Телеграм Боте и по emal за 1 час до встречи. 
 
 До встречи🙂, 
-Ваша команда MathHelp. 
+Ваша команда MathPad. 
 
 P.S. Если Ваши планы изменятся, пожалуйста, сообщите об этом заранее по e-mail: zhborodaeva@gmail.com';
 
@@ -79,4 +80,20 @@ P.S. Если Ваши планы изменятся, пожалуйста, со
     return json_decode($result, true);
   }
 
+
+  public function checkTelegram(Request $request){
+    $telegram_id = $request->telegram_id;
+    $user = User::where('telegram_id', $telegram_id)->first();
+    if ($user) {
+      return response()->json([
+        'data' => true,
+        'status' => '200',
+      ]); 
+    } else {
+      return response()->json([
+        'data' => false,
+        'status' => '404',
+      ]);
+    }
+  }
 }

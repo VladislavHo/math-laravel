@@ -21,10 +21,8 @@ class SendMail extends Mailable
      */
     public function __construct($request, $name)
     {
-        $formattedDate = Carbon::parse($request->date)->format('d.m.Y');
-
-        $dateCarbonFormat = Carbon::createFromFormat('d.m.Y', $formattedDate)->locale('ru')->translatedFormat('j F Y');
-
+        $dateFormat = date('d.m.Y', strtotime($request->date));
+        $dateCarbonFormat = Carbon::createFromFormat('d.m.Y', $dateFormat)->locale('ru')->translatedFormat('j F Y');
         $this->date = $dateCarbonFormat;
         $this->time = $request->time;
         $this->userName = $name;
@@ -36,7 +34,7 @@ class SendMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Send Mail',
+            subject: 'Math Pad Team',
         );
     }
 

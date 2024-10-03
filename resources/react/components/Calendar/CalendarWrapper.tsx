@@ -12,6 +12,7 @@ import AnswerPopupCalendar from '../AnswerPopupCalendar/AnswerPopupCalendar';
 import { checkPayment, checkPaymentStripe } from '../../api/payApi';
 import { useNavigate } from 'react-router-dom';
 import { TelegramSendMessage } from '../../api/telegramApi';
+import ErrorPopup from '../ErrorPopup/ErrorPopup';
 
 
 type ValuePiece = Date | null;
@@ -28,13 +29,17 @@ const CalendarWrapper = observer(() => {
 
   const [isOpenPopup, setIsOpenPopap] = useState(false);
   const [selectedTime, setSelectedTime] = useState('');
+  const [isLoading, setIsLoading] = useState({
+    success: false,
+    error: false
+  });
   const [date, onChangeDate] = useState<Value>(new Date());
   const [newValue, setNewValue] = useState<Value | null>(null);
 
 
   useEffect(() => {
 
-    if(!paymethod){
+    if (!paymethod) {
       navigation('/')
     }
 
@@ -50,8 +55,8 @@ const CalendarWrapper = observer(() => {
       checkPayment(user_id, payment_id)
     }
 
-    if(!!String(user_id) && !!String(paymethod) && paymethod === 'stripe') {
-      checkPaymentStripe({userID: user_id})
+    if (!!String(user_id) && !!String(paymethod) && paymethod === 'stripe') {
+      checkPaymentStripe({ userID: user_id })
     }
 
   }, [])
@@ -79,12 +84,18 @@ const CalendarWrapper = observer(() => {
   };
 
   function handleClickSubmit(date: Date) {
-    
+
 
     localStorage.removeItem('paymethod')
 
-  
+    setIsLoading({ ...isLoading, success: true })
     handleClickAppointment(date)
+      .then(() => {
+        setIsLoading({ ...isLoading, success: false })
+      })
+      .catch(() => {
+        setIsLoading({ ...isLoading, error: true })
+      })
 
     setIsOpenPopap(true)
 
@@ -92,11 +103,12 @@ const CalendarWrapper = observer(() => {
 
 
 
-
   async function handleClickAppointment(value: Date) {
     try {
+
       await addedWithUserAppointmentActions({ date: value, time: selectedTime })
       await TelegramSendMessage({ date: value, time: selectedTime, user_id })
+
     } catch (error) {
       console.log(error)
     }
@@ -120,7 +132,14 @@ const CalendarWrapper = observer(() => {
 
   return (
     <div className='calendar--wrapper'>
-      {isOpenPopup && (
+
+      {
+        isLoading.error && (
+          <ErrorPopup />
+        )
+      }
+
+      {isOpenPopup && !isLoading.success && (
         <AnswerPopupCalendar date={new Date(date as Date).toLocaleDateString()} time={selectedTime} />
       )}
       <div className="title">
@@ -165,7 +184,7 @@ const CalendarWrapper = observer(() => {
 
       {selectedTime ? <p>Вы выбрали: <span>{new Date(date as Date).toLocaleDateString()} {selectedTime}</span>, эта дата свободна</p> : <p>Выберите дату и время</p>}
 
-      <button className='btn' disabled={!selectedTime} onClick={() => handleClickSubmit(date as Date)}>Записаться</button>
+      <button className='btn' disabled={!selectedTime} onClick={() => handleClickSubmit(date as Date)}>{isLoading.success ? 'Загрузка...' : 'Записаться'}</button>
     </div>
   );
 })

@@ -63,7 +63,7 @@
     margin: 0 auto;
     user-select: none;
 
-    a {
+    button {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -71,6 +71,12 @@
       background: #2ba2db;
       border-radius: 25px;
       padding: 15px 33px;
+      cursor: pointer;
+      border: none;
+      outline: none;
+      &:disabled{
+        background-color: #ababab;
+      }
       @media screen and (max-width: 480px) {
         padding: 10px 20px;
       }

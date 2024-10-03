@@ -30,7 +30,7 @@
       color: var(--1);
       text-align: center;
     }
-    a{
+    a.text{
       max-width: 500px;
       padding: 20px 46px;
       font-family: var(--font-family);
@@ -40,6 +40,9 @@
       background: #2ba2db;
       border-radius: 15px;
       text-align: center;
+    }
+    a.article_link{
+      text-decoration: underline !important;
     }
     button{
       width: 200px;
