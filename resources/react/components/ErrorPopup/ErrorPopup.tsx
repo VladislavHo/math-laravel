@@ -1,10 +1,10 @@
 import "./error_popup.scss"
 
-export default function ErrorPopup() {
+export default function ErrorPopup({message}:{message:string}) {
   return (
     <div className="error-message--container">
       <div className="error-message--wrapper">
-        <p className="error-message--text">Произошла ошибка. <br /> Пожалуйста, повторите попытку позже или обновите страницу.</p>
+        <p className="error-message--text">{message}</p>
       </div>
     </div>
   )

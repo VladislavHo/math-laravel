@@ -9,58 +9,59 @@ use DefStudio\Telegraph\Handlers\WebhookHandler;
 use Illuminate\Support\Stringable;
 use DefStudio\Telegraph\Keyboard\ReplyButton;
 use DefStudio\Telegraph\Keyboard\ReplyKeyboard;
+use App\Models\User;
 use Log;
 class Handler extends WebhookHandler
 {
   public function calendar(): void
   {
-      $currentMonth = date('F Y'); // Текущий месяц и год
-      $daysInMonth = date('t'); // Количество дней в месяце
-      $firstDayOfMonth = date('w', strtotime("first day of this month")); // Первый день месяца (0 - воскресенье, 6 - суббота)
-  
-      // Создаем клавиатуру
-      $keyboard = ReplyKeyboard::make()
-          ->row([
-              ReplyButton::make($currentMonth),
-              ReplyButton::make('Вперед'),
-          ])
-          ->row([
-              ReplyButton::make('Пн'),
-              ReplyButton::make('Вт'),
-              ReplyButton::make('Ср'),
-              ReplyButton::make('Чт'),
-              ReplyButton::make('Пт'),
-              ReplyButton::make('Сб'),
-              ReplyButton::make('Вс'),
-          ]);
-  
-      // Добавляем пустые кнопки для выравнивания
-      $row = [];
-      for ($i = 0; $i < $firstDayOfMonth; $i++) {
-          $row[] = ReplyButton::make('Пусто'); // Пустая кнопка для выравнивания
+    $currentMonth = date('F Y'); // Текущий месяц и год
+    $daysInMonth = date('t'); // Количество дней в месяце
+    $firstDayOfMonth = date('w', strtotime("first day of this month")); // Первый день месяца (0 - воскресенье, 6 - суббота)
+
+    // Создаем клавиатуру
+    $keyboard = ReplyKeyboard::make()
+      ->row([
+        ReplyButton::make($currentMonth),
+        ReplyButton::make('Вперед'),
+      ])
+      ->row([
+        ReplyButton::make('Пн'),
+        ReplyButton::make('Вт'),
+        ReplyButton::make('Ср'),
+        ReplyButton::make('Чт'),
+        ReplyButton::make('Пт'),
+        ReplyButton::make('Сб'),
+        ReplyButton::make('Вс'),
+      ]);
+
+    // Добавляем пустые кнопки для выравнивания
+    $row = [];
+    for ($i = 0; $i < $firstDayOfMonth; $i++) {
+      $row[] = ReplyButton::make('Пусто'); // Пустая кнопка для выравнивания
+    }
+
+    // Генерируем кнопки для каждого дня месяца
+    for ($day = 1; $day <= $daysInMonth; $day++) {
+      $row[] = ReplyButton::make((string) $day);
+
+      // Добавляем строку в клавиатуру после каждых 7 кнопок (неделя)
+      if (count($row) === 7) {
+        $keyboard->row($row);
+        $row = []; // Сбрасываем строку
       }
-  
-      // Генерируем кнопки для каждого дня месяца
-      for ($day = 1; $day <= $daysInMonth; $day++) {
-          $row[] = ReplyButton::make((string) $day);
-  
-          // Добавляем строку в клавиатуру после каждых 7 кнопок (неделя)
-          if (count($row) === 7) {
-              $keyboard->row($row);
-              $row = []; // Сбрасываем строку
-          }
+    }
+
+    // Если последняя строка не заполнена, добавляем пустые кнопки
+    if (count($row) > 0) {
+      while (count($row) < 7) {
+        $row[] = ReplyButton::make(''); // Добавляем пустые кнопки до 7
       }
-  
-      // Если последняя строка не заполнена, добавляем пустые кнопки
-      if (count($row) > 0) {
-          while (count($row) < 7) {
-              $row[] = ReplyButton::make(''); // Добавляем пустые кнопки до 7
-          }
-          $keyboard->row($row);
-      }
-  
-      // Отправляем сообщение с календарем
-      $this->chat->html("Календарь на $currentMonth:")->replyKeyboard($keyboard)->send();
+      $keyboard->row($row);
+    }
+
+    // Отправляем сообщение с календарем
+    $this->chat->html("Календарь на $currentMonth:")->replyKeyboard($keyboard)->send();
   }
 
   public function start(): void
@@ -71,15 +72,31 @@ class Handler extends WebhookHandler
     // $message = $update['message'];
     if (isset($update['callback_query'])) {
       $callbackQuery = $update['callback_query'];
-      $userId = $callbackQuery['from']['id']; 
+      $userId = $callbackQuery['from']['id'];
+      User::create([
+        'telegram_id' => $userId,
+      ]);
     } else if (isset($update['message'])) {
       $message = $update['message'];
-      $userId = $message['from']['id']; 
+      $userId = $message['from']['id'];
+
     } else {
       $this->chat->html('Нет информации о пользователе.')->send();
       return;
     }
-    Log::info('User ID: ' . $userId);
+
+
+    $user = User::where('telegram_id', $userId)->first();
+
+    if($user) {
+      User::where('telegram_id', $userId)->update([
+        'telegram_id' => $userId,
+      ]);
+    }else{
+      User::create([
+        'telegram_id' => $userId,
+      ]);
+    }
 
     $textHello = 'Добрый день! 
 
@@ -94,9 +111,10 @@ class Handler extends WebhookHandler
 
     sleep(1);
     $this->chat->html('Давай проверим подписку?')->keyboard(Keyboard::make()->buttons([
- 
+
       Button::make('Проверить подписку')->action("change"),
     ]))->send();
+
 
 
   }
@@ -113,16 +131,16 @@ class Handler extends WebhookHandler
 
   public function change(): void
   {
-  
+
     $update = json_decode(file_get_contents('php://input'), true);
     $app_url = env('APP_URL');
 
     if (isset($update['callback_query'])) {
       $callbackQuery = $update['callback_query'];
-      $userId = $callbackQuery['from']['id']; 
+      $telegramId = $callbackQuery['from']['id'];
     } else if (isset($update['message'])) {
       $message = $update['message'];
-      $userId = $message['from']['id']; 
+      $telegramId = $message['from']['id'];
     } else {
       $this->chat->html('Нет информации о пользователе.')->send();
       return;
@@ -132,7 +150,7 @@ class Handler extends WebhookHandler
     $token = env('TELEGRAM_TOKEN');
     $changeGroup = '@foreignmath';
 
-    $urlChangeGroup = "https://api.telegram.org/bot$token/getChatMember?chat_id=$changeGroup&user_id=$userId";
+    $urlChangeGroup = "https://api.telegram.org/bot$token/getChatMember?chat_id=$changeGroup&user_id=$telegramId";
 
     try {
       $response = file_get_contents($urlChangeGroup);
@@ -155,6 +173,12 @@ class Handler extends WebhookHandler
       $status = $data['result']['status'];
       if ($status === 'member' || $status === 'administrator' || $status === 'creator') {
 
+       $user =  User::where('telegram_id', $telegramId)->update([
+          'is_subscribed' => true,
+        ]);
+
+      $userId = User::where('telegram_id', $telegramId)->first()->id;
+
         $this->chat->html('Спасибо, что подписались')->send();
 
         sleep(1);
@@ -167,15 +191,18 @@ class Handler extends WebhookHandler
         В методе нет никакой необходимости заставлять ребенка учиться, т.к. он построен на самомотивации ребенка.  Максимум отдыха и минимум напряжения для вас с хорошим результатом в учебе у ребенка, - о чем еще можно мечтать?
         
         Жмите на кнопку ниже и забирайте статью с разбором метода.';
+        
         $this->chat->html($text)->keyboard(Keyboard::make()->buttons([
           Button::make('Забрать статью')->url("$app_url/$userId/article"),
         ]))->send();
 
       } else {
+        User::where('telegram_id', $telegramId)->update([
+          'is_subscribed' => false,
+        ]);
         $this->chat->html('Вы не подписались')->keyboard(Keyboard::make()->buttons([
           Button::make('Подпишись на канал и забирай статью')->url('https://t.me/foreignmath'),
-          // Button::make('Это тестовый канал')->url('https://t.me/test_chanel_for_testing'),
-          // Button::make('Проверить подписку')->action("change"),
+
         ]))->send();
       }
     } else {

@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 // import {CardElement,PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import {PaymentElement } from '@stripe/react-stripe-js';
 import { Stripe, StripeElements } from '@stripe/stripe-js';
+
+
 import {SERVER_SITE} from "../../config/config";
 import './payment--stripe.scss';
 
@@ -27,7 +29,7 @@ const CheckoutForm: React.FC<{ stripe:Stripe | null; elements:StripeElements | n
         const result = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: `${SERVER_SITE}/calendar`, // Укажите URL для перенаправления после успешного платежа
+                return_url: `${SERVER_SITE}/api/payment/successStripe`, // Укажите URL для перенаправления после успешного платежа
             },
         });
 

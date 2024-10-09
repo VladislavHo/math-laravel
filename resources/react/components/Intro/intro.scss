@@ -1,5 +1,5 @@
 @import '../../styles/mixin.scss';
-
+@import '../../styles/calc-between-width.scss';
 .intro {
   // max-width: 820px;
   margin: 0 auto;
@@ -50,7 +50,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: flex-start;
-      gap: 5px;
+      gap: calc-between-width(1280, 60, 320, 5);;
 
       .subtitle {
         max-width: 410px;

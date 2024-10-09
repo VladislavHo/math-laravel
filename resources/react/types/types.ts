@@ -1,6 +1,5 @@
 export interface User{
   id?: string;
-  telegram_id: string | undefined;
   name: string;
   lastName: string;
   phone: string;
@@ -13,6 +12,7 @@ export interface User{
 }
 
 export interface FormValues {
+  id: string | null;
   name: string;
   lastName: string;
   country: string;

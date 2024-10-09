@@ -21,7 +21,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 
 const CalendarWrapper = observer(() => {
   const navigation = useNavigate()
-  const user_id = localStorage.getItem('id') ?? '';
+  const id = localStorage.getItem('id') ?? '';
   const payment_id = localStorage.getItem('payment_id') ?? '';
   const paymethod = localStorage.getItem('paymethod') ?? '';
   const { addedWithUserAppointmentActions } = UserStore
@@ -51,12 +51,12 @@ const CalendarWrapper = observer(() => {
 
 
 
-    if (!!String(user_id) && !!String(payment_id)) {
-      checkPayment(user_id, payment_id)
+    if (!!String(id) && !!String(payment_id)) {
+      checkPayment(id, payment_id)
     }
 
-    if (!!String(user_id) && !!String(paymethod) && paymethod === 'stripe') {
-      checkPaymentStripe({ userID: user_id })
+    if (!!String(id) && !!String(paymethod) && paymethod === 'stripe') {
+      checkPaymentStripe({ userID: id })
     }
 
   }, [])
@@ -106,8 +106,8 @@ const CalendarWrapper = observer(() => {
   async function handleClickAppointment(value: Date) {
     try {
 
-      await addedWithUserAppointmentActions({ date: value, time: selectedTime })
-      await TelegramSendMessage({ date: value, time: selectedTime, user_id })
+      await addedWithUserAppointmentActions({ date: value, time: selectedTime, id })
+      await TelegramSendMessage({ date: value, time: selectedTime, user_id: id})
 
     } catch (error) {
       console.log(error)
@@ -135,7 +135,7 @@ const CalendarWrapper = observer(() => {
 
       {
         isLoading.error && (
-          <ErrorPopup />
+          <ErrorPopup message='Произошла ошибка. Обнавитье страницу или напишите на почту: zhborodaeva@gmail.com'/>
         )
       }
 

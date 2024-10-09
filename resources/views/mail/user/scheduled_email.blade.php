@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Запланированное письмо</title>
+    <title>Ваша ссылка на встречу MathPad через 1 час</title>
 </head>
 <body>
 <main>
     <p>Добрый день, {{$userName}} !</p><br>
     <div class="image--container" style="max-width: 100%; display: flex;align-items: center;justify-content: center">
-        <img src="https://github.com/VladislavHo/math-laravel/blob/main/resources/images/photo_2024-09-27_11-30-32.jpg?raw=true" style="border-radius: 10px" alt="img" style="max-width:400px; height: auto;">
+        <img src="https://github.com/VladislavHo/math-laravel/blob/main/resources/images/photo_2024-09-27_11-30-32.jpg?raw=true" style="border-radius: 10px" alt="img" style="max-width:400px;width: 100%; height: auto;">
 
     </div>
 

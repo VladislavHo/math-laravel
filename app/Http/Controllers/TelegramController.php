@@ -26,10 +26,11 @@ class TelegramController extends Controller
     $dateCarbonFormat = Carbon::createFromFormat('d.m.Y', $dateFormat)->locale('ru')->translatedFormat('j F Y');
     $timeFormat = date('H:i', strtotime($time));
 
-    Log::info('telegram' . $dateCarbonFormat);
 
     $user = User::find($userId);
 
+
+    Log::info($user);
     $chatId = $user->telegram_id;
     $name = $user->name;
 
@@ -81,18 +82,30 @@ P.S. Если Ваши планы изменятся, пожалуйста, со
   }
 
 
-  public function checkTelegram(Request $request){
-    $telegram_id = $request->telegram_id;
-    $user = User::where('telegram_id', $telegram_id)->first();
-    if ($user) {
-      return response()->json([
-        'data' => true,
-        'status' => '200',
-      ]); 
+  public function checkTelegram(Request $request)
+  {
+    $userId = $request->id;
+    $user = User::where('id', $userId) -> first();
+
+    Log::info($userId);
+    if ($user) { 
+      if ($user->is_subscribed) {
+        return response()->json([
+          'data' => true,
+          'status' => '200',
+        ]);
+      } else {
+        return response()->json([
+          'data' => false,
+          'status' => '404',
+        ]);
+      }
     } else {
+
       return response()->json([
         'data' => false,
         'status' => '404',
+        'message' => 'User not found',
       ]);
     }
   }

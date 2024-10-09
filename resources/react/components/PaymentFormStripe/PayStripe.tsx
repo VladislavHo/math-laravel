@@ -12,9 +12,8 @@ const PayStripe: React.FC = () => {
     const [clientSecret, setClientSecret] = useState<string | null>(null);
 
     useEffect(() => {
-      console.log(true)
         const fetchClientSecret = async () => {
-            const response = await fetch('/api/payment/create-stripe', {
+            const response = await fetch('api/payment/create-stripe', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

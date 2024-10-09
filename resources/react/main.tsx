@@ -29,12 +29,12 @@ const router = createBrowserRouter([
     element: <div className='not-found'>404</div>,
   },
   {
-    path: '/:user_id/questionnaire',
-    element: <Questionnaire />,
+    path: '/:id/questionnaire',
+    element: <Questionnaire/>,
   },
   {
-    path: '/:user_id/article/',
-    element: <Article />,
+    path: '/:id/article/',
+    element: <Article/>,
   },
   {
     path: '/calendar',

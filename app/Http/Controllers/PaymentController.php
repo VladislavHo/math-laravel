@@ -13,9 +13,6 @@ class PaymentController extends Controller
 {
     public function createPayment(Request $request)
     {
-        Log::info($request->all());
-
-
 
         $client = new Client();
         $client->setAuth(env('YOOKASSA_SHOP_ID'), env('YOOKASSA_SECRET_KEY'));
@@ -53,6 +50,11 @@ class PaymentController extends Controller
 
 
         return view('payment.success');
+    }
+
+    public function successStripe(){
+
+        return view('payment.successStripe');
     }
     public function home()
     {
@@ -133,7 +135,6 @@ class PaymentController extends Controller
     public function createPaymentStripe(Request $request)
     {
 
-        Log::info($request->all());
         Stripe::setApiKey(env('STRIPE_SECRET'));
 
         try {

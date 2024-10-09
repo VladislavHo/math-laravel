@@ -37,7 +37,7 @@ class ScheduledEmail extends Mailable
     {
         return $this
         
-            ->subject('Запланированное сообщение')
+            ->subject('Ваша ссылка на встречу MathPad через 1 час')
             ->view('mail.user.scheduled_email');
 
     }

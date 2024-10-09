@@ -20,14 +20,21 @@ export async function TelegramSendMessage({ date, time, user_id }: { date: Date,
     }
     const data = await response.json();
 
-    return data
+    return {
+      success: true,
+      data
+    }
   } catch (error) {
-    console.log(error)
+    return {
+      success: false,
+      error: error
+    }
   }
 }
 
 
-export async function checkTelegram(telegram_id: string) {
+export async function checkTelegram(id: string) {
+  console.log(id)
   try {
     const response = await fetch(`${SERVER_SITE}/api/checktelegram`, {
       method: 'POST',
@@ -35,14 +42,14 @@ export async function checkTelegram(telegram_id: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        telegram_id
+        id
       }),
     });
 
 
-    if(!response.ok) {
-      throw new Error('Error response')
-    }
+    // if(!response.ok) {
+    //   throw new Error('Error response')
+    // }
     const data = await response.json();
 
     return data

@@ -7,7 +7,6 @@ import { User } from "../types/types";
 class UserStore {
   userData: User = {
     id: '',
-    telegram_id: '',
     name: '',
     lastName: '',
     phone: '',
@@ -35,7 +34,6 @@ class UserStore {
 
       runInAction(() => {
         this.userData = userResponse.data
-        localStorage.setItem('id', userResponse.data.id ?? '')
       })
 
 
@@ -47,8 +45,7 @@ class UserStore {
   }
 
 
-   addedWithUserAppointmentActions = async ({ date, time }: { date: Date, time: string })=> {
-    const id = localStorage.getItem('id') ?? ''
+   addedWithUserAppointmentActions = async ({ date, time, id }: { date: Date, time: string, id: string })=> {
     try {
       const userResponse = await addedWithUserAppointment({ id, date, time })
 
