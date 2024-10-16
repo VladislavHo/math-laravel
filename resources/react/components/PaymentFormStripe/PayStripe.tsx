@@ -18,7 +18,7 @@ const PayStripe: React.FC = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ amount: 1000, currency: 'usd' }), // Пример суммы
+                body: JSON.stringify({ amount: 25, currency: 'eur' }), // Пример суммы
             });
 
             const data = await response.json();

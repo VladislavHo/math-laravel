@@ -8,11 +8,11 @@ import { observer } from 'mobx-react-lite';
 import UserStore from '../../store/user_store';
 import DateStore from '../../store/date_store';
 import AnswerPopupCalendar from '../AnswerPopupCalendar/AnswerPopupCalendar';
-// import { useNavigate } from 'react-router-dom';
-import { checkPayment, checkPaymentStripe } from '../../api/payApi';
 import { useNavigate } from 'react-router-dom';
+import { checkPayment, checkPaymentStripe } from '../../api/payApi';
 import { TelegramSendMessage } from '../../api/telegramApi';
 import ErrorPopup from '../ErrorPopup/ErrorPopup';
+import { getAnalyticsCalendar } from '../../api/analyticsApi';
 
 
 type ValuePiece = Date | null;
@@ -24,7 +24,7 @@ const CalendarWrapper = observer(() => {
   const id = localStorage.getItem('id') ?? '';
   const payment_id = localStorage.getItem('payment_id') ?? '';
   const paymethod = localStorage.getItem('paymethod') ?? '';
-  const { addedWithUserAppointmentActions } = UserStore
+  const { addedWithUserAppointmentActions, errorUserData } = UserStore
   const { getDatesActions, dateAppointement } = DateStore
 
   const [isOpenPopup, setIsOpenPopap] = useState(false);
@@ -48,7 +48,7 @@ const CalendarWrapper = observer(() => {
     moundhPonel?.setAttribute('disabled', 'true');
 
     getDatesActions()
-
+    getAnalyticsCalendar(id)
 
 
     if (!!String(id) && !!String(payment_id)) {
@@ -59,7 +59,9 @@ const CalendarWrapper = observer(() => {
       checkPaymentStripe({ userID: id })
     }
 
+
   }, [])
+
 
 
 
@@ -85,19 +87,20 @@ const CalendarWrapper = observer(() => {
 
   function handleClickSubmit(date: Date) {
 
-
     localStorage.removeItem('paymethod')
 
     setIsLoading({ ...isLoading, success: true })
     handleClickAppointment(date)
-      .then(() => {
-        setIsLoading({ ...isLoading, success: false })
-      })
-      .catch(() => {
-        setIsLoading({ ...isLoading, error: true })
-      })
+    .then(() => {
+      setIsLoading({ ...isLoading, success: false })
+    })
+    .catch(() => {
+      setIsLoading({ ...isLoading, error: true })
+    })
+
 
     setIsOpenPopap(true)
+
 
   }
 
@@ -107,10 +110,13 @@ const CalendarWrapper = observer(() => {
     try {
 
       await addedWithUserAppointmentActions({ date: value, time: selectedTime, id })
-      await TelegramSendMessage({ date: value, time: selectedTime, user_id: id})
+      if(!errorUserData) {
+        TelegramSendMessage({ date: value, time: selectedTime, user_id: id })
+      }
+
 
     } catch (error) {
-      console.log(error)
+      setIsLoading({ ...isLoading, error: true })
     }
   }
 
@@ -134,12 +140,12 @@ const CalendarWrapper = observer(() => {
     <div className='calendar--wrapper'>
 
       {
-        isLoading.error && (
-          <ErrorPopup message='Произошла ошибка. Обнавитье страницу или напишите на почту: zhborodaeva@gmail.com'/>
+        errorUserData && (
+          <ErrorPopup message='Произошла ошибка. Обновитье страницу или напишите на почту: zhborodaeva@gmail.com' />
         )
       }
 
-      {isOpenPopup && !isLoading.success && (
+      {isOpenPopup && !isLoading.success && !errorUserData && (
         <AnswerPopupCalendar date={new Date(date as Date).toLocaleDateString()} time={selectedTime} />
       )}
       <div className="title">

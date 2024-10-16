@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './article.scss'
 import { useEffect, useState } from 'react';
 import { checkTelegram } from '../../api/telegramApi';
+import {getAnalyticsArticle} from '../../api/analyticsApi';
 import Spinner from '../Spinner/Spinner';
 import ErrorPopup from '../ErrorPopup/ErrorPopup';
 export default function Article() {
@@ -16,7 +17,6 @@ export default function Article() {
     // console.log('user_id', user_id);
 
     const getCheckTelegram = async () => {
-      console.log(id)
       try {
         localStorage.setItem('id', id ?? '')
         const telegramCheck = await checkTelegram(id ?? '')
@@ -28,6 +28,8 @@ export default function Article() {
 
         setCheckStateTelegram(telegramCheck.data)
         localStorage.setItem('sub', telegramCheck.data.toString())
+        getAnalyticsArticle(id ?? '')
+
       } catch (error) {
         setCheckStateTelegram(false)
       }
@@ -218,8 +220,8 @@ export default function Article() {
                 <p className='italic_text'><strong>Мы:</strong> Ребята повышают свою мотивацию на решение математики настолько, что переходят от grade F к grade A*. Пушить не нужно, т.к. ребенку интересно: вы отдыхаете, а ребенок учится</p>
 
 
-                <ul>
                   <p className='list_title'>Наше приложение:</p>
+                <ul>
                   <li><p>Предлагает только те задачи, которые нужны <strong>именно вашему ребенку </strong> </p></li>
                   <li><p>Проверяет <strong>не только ответы, но и решения</strong> </p></li>
                   <li><p>Используется <strong>в комбинации с личными занятиями с тьютором</strong> </p></li>

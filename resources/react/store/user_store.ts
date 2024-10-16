@@ -18,7 +18,7 @@ class UserStore {
     income: '',
   }
 
-  errorUserData: boolean = false
+  errorUserData = false
 
   constructor() {
     makeAutoObservable(this);
@@ -37,7 +37,6 @@ class UserStore {
       })
 
 
-      console.log(this.userData);
 
     } catch (error) {
       this.errorUserData = true
@@ -50,10 +49,9 @@ class UserStore {
       const userResponse = await addedWithUserAppointment({ id, date, time })
 
       runInAction(() => {
-        this.userData = { ...userResponse }
-
+        this.userData = { ...userResponse.data }
+      userResponse.success ? this.errorUserData = false : this.errorUserData = true
       })
-      console.log(userResponse);
     } catch (error) {
       this.errorUserData = true
     }

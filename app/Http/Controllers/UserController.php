@@ -2,9 +2,12 @@
 
 // namespace App\Http\Controllers\UserController;
 namespace App\Http\Controllers;
+use App\Models\Analytics;
 use App\Models\User;
+use App\Models\Questionnaire;
 use Illuminate\Http\Request;
 use Log;
+use Symfony\Component\Console\Question\Question;
 class UserController
 {
   //
@@ -22,26 +25,36 @@ class UserController
   {
 
     try {
-      // $user = User::create($request->all());
 
-      // $user = User::where('telegram_id', $request->all());
+      $user = User::where('id', $request->id);
 
+      Questionnaire::where('user_id', $request->id)->update(
+        [
+          'name' => $request->name,
+          'lastName' => $request->lastName,
+          'age' => $request->age,
+          'country' => $request->country,
+          'phone' => $request->phone,
+          'email' => $request->email,
+          'tasks' => $request->tasks,
+          'deadline' => $request->deadline,
+          'investment' => $request->investment
+        ]
+      );
 
-      $user = User::where('id', $request->id)->update($request->all());
-      // $user = User::find($request->telegram_id);
-
-
-      // Log::info($user . 'response data ' . $request->all());
-
-      Log::info($request->all());
-
+      Analytics::where('user_id', $request->id)->update(
+        [
+          "is_questionnaires_passed" => true
+        ]
+      );
 
       if ($user) {
+
         return response()->json([
           'data' => $user,
           'status' => '200',
         ]);
-      }else{
+      } else {
 
         return response()->json([
           'data' => $user,
@@ -50,7 +63,6 @@ class UserController
       }
 
     } catch (\Exception $e) {
-      \Log::error($e->getMessage());
       return response()->json([
         'data' => $e->getMessage(),
         'status' => '500',
@@ -61,9 +73,11 @@ class UserController
   public function update(Request $request, $id)
   {
     $user = User::find($id);
-    // $user->update($request);
 
     $user->update($request->all());
+
+
+
     return response()->json([
       'data' => $user,
       'status' => '200',
@@ -78,4 +92,5 @@ class UserController
       'status' => '200',
     ]);
   }
+
 }

@@ -18,3 +18,4 @@ Artisan::command('send:scheduled-email', function () {
 // Запланируйте задачу
 $schedule = app(Schedule::class);
 $schedule->command('send:scheduled-email')->everyMinute(); 
+$schedule->command('send:send-daily-xlsx')->everyMinute(); 

@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Analytics;
 use Carbon\Carbon;
 use Log;
 
@@ -29,14 +30,12 @@ class TelegramController extends Controller
 
     $user = User::find($userId);
 
-
-    Log::info($user);
     $chatId = $user->telegram_id;
     $name = $user->name;
 
     $message = 'Добрый день,  ' . $name . '! 
 
-Спасибо за тестирование и консультацию в команду инновационного проекта MathPad🤗, который позволяет гарантированно достигать академических целей на западе за счет использования научных знаний и инновационных AI решений.
+Спасибо за запись на тестирование и консультацию в команду инновационного проекта MathPad🤗, который позволяет гарантированно достигать академических целей на западе за счет использования научных знаний и инновационных AI решений.
 
 Вы записались к нам на встречу ' . $dateCarbonFormat . ' в ' . $timeFormat . '. 
 
@@ -81,15 +80,17 @@ P.S. Если Ваши планы изменятся, пожалуйста, со
     return json_decode($result, true);
   }
 
-
   public function checkTelegram(Request $request)
   {
     $userId = $request->id;
     $user = User::where('id', $userId) -> first();
 
-    Log::info($userId);
-    if ($user) { 
-      if ($user->is_subscribed) {
+    $analytics = Analytics::where('user_id', $userId)->first();
+    // $user = User::with('analytics')->where('id', $userId)->first();
+
+    // Log::info($user . 'User analytics');
+    if ($analytics) { 
+      if ($analytics->is_subscribed_telegram) {
         return response()->json([
           'data' => true,
           'status' => '200',

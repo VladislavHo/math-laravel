@@ -10,6 +10,7 @@ use App\Services\ScheduledTelegram ;
 class SendScheduledEmail extends Command
 {
     protected $signature = 'send:scheduled-email';
+
     protected $description = 'Отправить запланированные письма';
 
     public function handle()
@@ -22,9 +23,7 @@ class SendScheduledEmail extends Command
 
 
             (new ScheduledTelegram())->sendMessage($email->recipient);
-            // $telegramSendMessage->sendMessage($email->recipient);
-            // $telegram = new ScheduledTelegram();
-            // $telegram->sendMessage($email->recipient);
+
             
             $email->delete(); 
         }

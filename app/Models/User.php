@@ -63,6 +63,16 @@ class User extends Authenticatable
         return $this->hasMany(Appointment::class);
     }
 
+    public function questionnaire()
+    {
+        return $this->hasOne(Questionnaire::class);
+    }
+
+    public function analytics()
+    {
+        return $this->hasOne(Analytics::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

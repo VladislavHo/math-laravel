@@ -5,6 +5,12 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TelegramController;
+use App\Http\Controllers\SendXlsxFileController;
+// use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\AnalyticsController;
+// use App\Http\Controllers\
+
+// use App\Http\Controllers\
 
 
 
@@ -36,3 +42,14 @@ Route::get('/payment/home', [PaymentController::class, 'home'])->name('payment.h
 Route::get('/payment/failure', [PaymentController::class, 'failure'])->name('payment.failure');
 Route::post('/payment/check', [PaymentController::class, 'checkPayment'])->name('payment.check');
 
+
+
+
+Route::get("/users/send_xlsx", [SendXlsxFileController::class, 'sendUsersXlsx']);
+
+
+
+Route::post("/analytics/article", [AnalyticsController::class, 'checekArticle']);
+Route::post("/analytics/questionnaire", [AnalyticsController::class, 'checekQuestionnaire']);
+Route::post("/analytics/is_pay", [AnalyticsController::class, 'checekIsPay']);
+Route::post("/analytics/calendar", [AnalyticsController::class, 'checekCalendar']);

@@ -7,6 +7,7 @@ use Log;
 use YooKassa\Client;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\Analytics;
 use Stripe\Stripe;
 use Stripe\PaymentIntent;
 class PaymentController extends Controller
@@ -52,7 +53,8 @@ class PaymentController extends Controller
         return view('payment.success');
     }
 
-    public function successStripe(){
+    public function successStripe()
+    {
 
         return view('payment.successStripe');
     }
@@ -162,9 +164,19 @@ class PaymentController extends Controller
 
         if ($request->user_id) {
 
-            User::where('id', $request->user_id)->update(['is_pay' => true]);
-            
-            Log::info('checkedPaymentStripe'. $request->user_id);
+            $user = User::with('analytics')->find($request->user_id);
+
+
+            if ($user && $user->analytics) {
+                $user->analytics()->update(['is_payment' => true]);
+                $paidInTotal =  $user->analytics()->value('paid_in_total');
+                $newTotal = $paidInTotal + 25;
+
+                $user->analytics()->update(['paid_in_total' => $newTotal]);
+            } else {
+                Log::warning("No user found with ID: {$request->user_id} or no analytics data.");
+            }
+
             Order::create(
                 [
                     'user_id' => $request->user_id,
@@ -175,9 +187,7 @@ class PaymentController extends Controller
             );
 
             User::with('appointments')->find($request->user_id);
-            Log::info('Payment succeeded');
         }
-        Log::info($request->all());
 
         return response()->json(['success' => true]);
     }

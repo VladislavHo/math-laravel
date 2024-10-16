@@ -6,6 +6,7 @@ namespace App\Mail;
 use Illuminate\Mail\Mailable;
 
 use App\Models\User;
+use App\Models\Questionnaire;
 use Carbon\Carbon;
 use Log;
 class ScheduledEmail extends Mailable
@@ -18,15 +19,17 @@ class ScheduledEmail extends Mailable
     public function __construct ($email)
     {
 
-        $user = User::where('email', $email)->first();
+        $user = User::with('questionnaire')->where('email', $email)->first();
+
+        $questionnaire = $user->questionnaire;
+
         $appointments = User::with('appointments')->find($user->id);
-        // $user = User::find($email);
 
         $date = Carbon::parse($appointments->date)->locale('ru')->translatedFormat('j F Y');
         $time = Carbon::parse($appointments->time)->locale('ru')->addHour()->translatedFormat('H:i');
         $this->dateUserFormat = $date;
         $this->timeUserFormat = $time;
-        $this->userName = $user->name;
+        $this->userName = $questionnaire->name;
 
 
         

@@ -12,13 +12,10 @@ return new class extends Migration {
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            
             $table->uuid('user_id');
             $table->string('payment_name');
             $table->string('status');
-            // $table->date('date_payment');
             $table-> date("date_payment")->nullable();
-
             $table->index('user_id', 'user_idx_order');
 
             // Внешний ключ для user_id

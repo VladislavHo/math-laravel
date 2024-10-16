@@ -11,6 +11,7 @@ import ErrorPopup from "../ErrorPopup/ErrorPopup";
 import Select from "react-select";
 import { OPTION_COUNTRY_CODES } from "../../config/config";
 import { customStyles } from "./styles";
+import { getAnalyticsQuestionnaire, getAnalyticsIsPay } from "../../api/analyticsApi";
 
 // import { useNavigate } from 'react-router-dom';
 
@@ -29,7 +30,6 @@ const Questionnaire = observer(() => {
   
   const [inputValueTask, setInputValueTask] = useState('Иное')
 
-  console.log(selectedOption);
   
 
   function setCountryNumber(newValue: unknown) {
@@ -39,9 +39,18 @@ const Questionnaire = observer(() => {
 
   useEffect(() => {
     setIsPayment(Math.random() < 0.5)
+
+
+    getAnalyticsQuestionnaire(id ?? '')
+
+    
+   
+    
   }, [])
 
-
+  useEffect(() => {
+    getAnalyticsIsPay(id ?? '', isPayment)
+  }, [isPayment])
 
   const {
     register,
@@ -304,15 +313,7 @@ const Questionnaire = observer(() => {
 
           <div className="investment-field field">
             <label className="label-title">Сколько вы готовы вкладывать в месяц в достижение академических целей по математике, физике и программированию?*</label>
-            <label htmlFor="">
-              <input
-                type="radio"
-                value="не готов"
-                style={{ marginRight: "5px" }}
-                {...register('investment', { required: 'Это поле обязательно' })}
-              />
-              Не готов(а) сейчас вкладываться
-            </label>
+
             <label>
               <input
                 type="radio"
@@ -340,7 +341,15 @@ const Questionnaire = observer(() => {
               />
               Свыше $700
             </label>
-
+            <label htmlFor="">
+              <input
+                type="radio"
+                value="Сколько нужно, столько и буду. Лишь бы был результат"
+                style={{ marginRight: "5px" }}
+                {...register('investment', { required: 'Это поле обязательно' })}
+              />
+              Сколько нужно, столько и буду. Лишь бы был результат
+            </label>
             {errors.investment && <span className="error-message">{errors.investment.message}</span>}
           </div>
 

@@ -8,9 +8,7 @@ use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 class Kernel extends ConsoleKernel
 {
     protected $commands = [
-        // Здесь вы можете регистрировать свои команды
-        // $this->load(__DIR__.'/Commands')
-        // $this->load(__DIR__.'/Commands')
+
     ];
     protected $middleware = [
         // Другие middleware...
@@ -19,13 +17,15 @@ class Kernel extends ConsoleKernel
 
     protected function commands()
     {
-        // $this->info('Команда send:scheduled-email была вызвана');
-        $this->load(__DIR__.'/Commands'); // Это должно загружать вашу команду
-        require base_path('routes/console.php'); // Стандартные команды Artisan
+
+        $this->load(__DIR__.'/Commands'); 
+        require base_path('routes/console.php'); 
     }
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('send:scheduled-email')->everyMinute(); 
+        // $schedule->command('send:send-daily-xlsx')->everyMinute();
+        $schedule->command('send:send-daily-xlsx')->dailyAt('00:00');
     }
 }

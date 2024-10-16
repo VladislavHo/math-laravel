@@ -1,4 +1,4 @@
-export const SERVER_SITE: string = 'https://4a5a-151-249-238-214.ngrok-free.app';
+export const SERVER_SITE: string = 'https://9877-151-249-232-230.ngrok-free.app';
 export const MAX_CALENDAR_DATE: Date = new Date(2024, 11, 1)
 
 export const CONTRY_CODES: { country: string; code: string }[] = [

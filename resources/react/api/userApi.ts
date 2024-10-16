@@ -14,6 +14,9 @@ export async function createUser(user: User) {
 
     const data = await response.json()
 
+    if(!response.ok) {
+      throw new Error('Error response')
+    }
     
     return data
   } catch (error) {
@@ -36,9 +39,17 @@ export async function addedWithUserAppointment({id, date, time}: {id: string, da
       })
     })
 
+    console.log(response, 'RESPONSE');
+    
+    if(!response.ok) {
+      throw new Error('Error response')
+    }
     const data = await response.json()
 
-    return data
+    return {
+      success: true,
+      data
+    }
   } catch (error) {
     return {
       success: false,

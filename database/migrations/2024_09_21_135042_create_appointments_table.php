@@ -17,16 +17,11 @@ return new class extends Migration
             $table->date('date');
             $table->time('time')->default('00:00:00'); 
             $table->string('status')->default('pending');
-
             $table->index('user_id', 'user_idx_appointment');
-
-            // Внешний ключ для user_id
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->name('user_fk_appointment');
 
             $table->timestamps();
 
-            // Определите внешний ключ
-            // $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
         });
     }
