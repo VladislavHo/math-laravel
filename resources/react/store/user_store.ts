@@ -8,6 +8,7 @@ class UserStore {
   userData: User = {
     id: '',
     name: '',
+    telegram_name: '',
     lastName: '',
     phone: '',
     email: '',

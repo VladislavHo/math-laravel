@@ -39,7 +39,6 @@ export async function addedWithUserAppointment({id, date, time}: {id: string, da
       })
     })
 
-    console.log(response, 'RESPONSE');
     
     if(!response.ok) {
       throw new Error('Error response')

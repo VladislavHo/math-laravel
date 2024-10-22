@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 
 
 
+use App\Models\Questionnaire;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Analytics;
 use Carbon\Carbon;
-use Log;
 
 
 
@@ -28,16 +28,16 @@ class TelegramController extends Controller
     $timeFormat = date('H:i', strtotime($time));
 
 
-    $user = User::find($userId);
+    $user = User::where('id', $userId)->first();
 
     $chatId = $user->telegram_id;
-    $name = $user->name;
+    $name = Questionnaire::where('user_id', $userId)->value('name');
 
     $message = 'Добрый день,  ' . $name . '! 
 
 Спасибо за запись на тестирование и консультацию в команду инновационного проекта MathPad🤗, который позволяет гарантированно достигать академических целей на западе за счет использования научных знаний и инновационных AI решений.
 
-Вы записались к нам на встречу ' . $dateCarbonFormat . ' в ' . $timeFormat . '. 
+Вы записались к нам на встречу ' . $dateCarbonFormat . ' в ' . $timeFormat . ' времени GMT +3 . '. '
 
 Встреча будет проходить следующим образом:
 Этап 1. До 30 минут - разговор с родителями по целям, задачам обучения. Необходимо присутствие только родителя. 
@@ -86,9 +86,7 @@ P.S. Если Ваши планы изменятся, пожалуйста, со
     $user = User::where('id', $userId) -> first();
 
     $analytics = Analytics::where('user_id', $userId)->first();
-    // $user = User::with('analytics')->where('id', $userId)->first();
 
-    // Log::info($user . 'User analytics');
     if ($analytics) { 
       if ($analytics->is_subscribed_telegram) {
         return response()->json([

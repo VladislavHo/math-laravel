@@ -42,6 +42,15 @@ class UserController
         ]
       );
 
+      $questionnaire = Questionnaire::where('user_id', $request->id)->first();
+      if ($questionnaire->telegram_name == null) {
+        $telegramName = $request->telegram_name;
+        $cleanedName = str_replace('@', '', $telegramName);
+        $questionnaire->update([
+          'telegram_name' => $cleanedName 
+        ]);
+      }
+
       Analytics::where('user_id', $request->id)->update(
         [
           "is_questionnaires_passed" => true

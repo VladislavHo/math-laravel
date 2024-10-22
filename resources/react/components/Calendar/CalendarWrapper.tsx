@@ -51,6 +51,8 @@ const CalendarWrapper = observer(() => {
     getAnalyticsCalendar(id)
 
 
+    console.log(dateAppointement, 'DATEAPPOINTEMENT')
+
     if (!!String(id) && !!String(payment_id)) {
       checkPayment(id, payment_id)
     }
@@ -175,7 +177,7 @@ const CalendarWrapper = observer(() => {
       {
         newValue && (
           <div className='time'>
-            <label htmlFor="time">Выберите время:</label>
+            <label htmlFor="time">Выберите время (Здесь и далее время GMT +3):</label>
             <select id="time" value={selectedTime} onChange={handleChangeTime}>
               <option value="">-- Выберите время --</option>
               {generateTimeOptions().map((time) => (

@@ -35,6 +35,7 @@ class UsersExport implements FromCollection, WithHeadings
                 'Консультация проведена' => (string) $analytics->consultation_conducted,
                 'Покупка курса' => (string) $analytics->purchase_of_course,
                 'Оплачено всего, евр' => (string) $analytics->paid_in_total,
+                "Дата создания" => $user->created_at
             ];
         });
     }
@@ -55,7 +56,8 @@ class UsersExport implements FromCollection, WithHeadings
             'Запись на консультацию',
             'Консультация проведена',
             'Покупка курса',
-            'Оплачено всего, евр'
+            'Оплачено всего, евр',
+            'Дата создания'
         ];
     }
 }

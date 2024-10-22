@@ -52,12 +52,12 @@ class AppointmentController
       return response()->json(['error' => 'Questionnaire not found'], 404);
     }
 
-    Log::info('Creating appointment for user', ['user_id' => $user->id]);
+
 
     // Установка временной зоны и даты
     $date = Carbon::parse($request->date)->setTimezone('Europe/Moscow');
     $timeCarbon = Carbon::createFromFormat('H:i', $request->time);
-
+    $timeCarbon->subHour();
     if (!$timeCarbon) {
       return response()->json(['error' => 'Invalid time format'], 400);
     }

@@ -26,7 +26,7 @@ class ScheduledEmail extends Mailable
         $appointments = User::with('appointments')->find($user->id);
 
         $date = Carbon::parse($appointments->date)->locale('ru')->translatedFormat('j F Y');
-        $time = Carbon::parse($appointments->time)->locale('ru')->addHour()->translatedFormat('H:i');
+        $time = Carbon::parse($appointments->time)->locale('ru')->addHours(1)->translatedFormat('H:i');
         $this->dateUserFormat = $date;
         $this->timeUserFormat = $time;
         $this->userName = $questionnaire->name;

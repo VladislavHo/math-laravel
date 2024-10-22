@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { getDates } from "../api/dateApi";
 
 class DateStore {
-  dateAppointement: string[] = []
+  dateAppointement: string[] = ['2024-10-19']
   constructor() {
     makeAutoObservable(this);
   }
@@ -13,7 +13,7 @@ class DateStore {
       const dateResponse = await getDates()
       if (dateResponse && dateResponse.dates) {
         runInAction(() => {
-          this.dateAppointement = dateResponse.dates
+          this.dateAppointement = this.dateAppointement.concat(dateResponse.dates)
         })
       } else {
         console.error('Error: getDates API call returned undefined or null')

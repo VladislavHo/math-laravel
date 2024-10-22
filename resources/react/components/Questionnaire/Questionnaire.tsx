@@ -27,10 +27,10 @@ const Questionnaire = observer(() => {
     error: false
   });
   const [selectedOption, setSelectedOption] = useState<string | null>("+7");
-  
+
   const [inputValueTask, setInputValueTask] = useState('Иное')
 
-  
+
 
   function setCountryNumber(newValue: unknown) {
     const option = newValue as { value: string; label: string };
@@ -43,9 +43,9 @@ const Questionnaire = observer(() => {
 
     getAnalyticsQuestionnaire(id ?? '')
 
-    
-   
-    
+
+
+
   }, [])
 
   useEffect(() => {
@@ -60,7 +60,7 @@ const Questionnaire = observer(() => {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const fullPhoneNumber = `${selectedOption} ${data.phone}`;
 
-    const user = { ...data,id: id ?? '',  phone: fullPhoneNumber }
+    const user = { ...data, id: id ?? '', phone: fullPhoneNumber }
 
 
     setIsLoading({ ...isLoading, success: true })
@@ -80,11 +80,11 @@ const Questionnaire = observer(() => {
       }
       {
         isActive && !isLoading.success && !errorUserData && (
-          <AnswerPopupQuestionnaire isPayment={isPayment} userID={id}  />
+          <AnswerPopupQuestionnaire isPayment={isPayment} userID={id} />
         )
       }
       <section className="questionnaire">
-        <h2 style={{maxWidth:"640px"}}>Анкета для записи на консультацию и тестирование от команды MathPad</h2>
+        <h2 style={{ maxWidth: "640px" }}>Анкета для записи на консультацию и тестирование от команды MathPad</h2>
         <p className="description-red">Анкета предназначена для родителей школьников</p>
 
 
@@ -117,6 +117,19 @@ const Questionnaire = observer(() => {
               placeholder="Поле ввода"
             />
             {errors.lastName && <span className="error-message">{errors.lastName.message}</span>}
+
+          </div>
+
+          <div className="lastName-field field">
+            <label className="label-title">
+              Ваш аккаунт в Telegram (через @)*
+            </label>
+            <input
+              type="text"
+              {...register('telegram_name', { required: 'Это поле обязательно', minLength: 2, maxLength: 15})}
+              placeholder="Поле ввода"
+            />
+            {errors.telegram_name && <span className="error-message">{errors.telegram_name.message}</span>}
 
           </div>
 
