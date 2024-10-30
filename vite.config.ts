@@ -9,16 +9,4 @@ export default defineConfig({
         }),
         react()
     ],
-    server: {
-        https: true, // Enable HTTPS
-        host: '0.0.0.0', // Allow access from external IPs
-        port: 3000, // Change this if needed
-    },
-    css: {
-        preprocessorOptions: {
-          scss: {
-            api: 'modern-compiler' // or "modern"
-          }
-        }
-      }
 });
