@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import { addedWithUserAppointment, createUser } from "../api/userApi";
+import { addedWithUserAppointment } from "../api/userApi";
 import { User } from "../types/types";
 
 
@@ -24,26 +24,6 @@ class UserStore {
   constructor() {
     makeAutoObservable(this);
   }
-
-
-
-
-   createUserActions = async (userDate: User) => {
-    try {
-      const userResponse = await createUser(userDate)
-
-
-      runInAction(() => {
-        this.userData = userResponse.data
-      })
-
-
-
-    } catch (error) {
-      this.errorUserData = true
-    }
-  }
-
 
    addedWithUserAppointmentActions = async ({ date, time, id }: { date: Date, time: string, id: string })=> {
     try {

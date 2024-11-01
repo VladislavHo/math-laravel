@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('appointments', function (Blueprint $table) {
-            $table->uuid('id')->primary(); // Изменяем на UUID
-            $table->uuid('user_id'); // Убедитесь, что тип данных совпадает
+            $table->uuid('id')->primary(); 
+            $table->uuid('user_id'); 
             $table->date('date');
             $table->time('time')->default('00:00:00'); 
             $table->string('status')->default('pending');

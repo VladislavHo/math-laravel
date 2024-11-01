@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import "./desc.scss"
-import { TelegramSvg } from '../Svg/Svg'
+// import { TelegramSvg } from '../Svg/Svg'
 import { useState } from "react";
 export default function Desc() {
   const [isChecked, setIsChecked] = useState(false);
-
+  const navigate = useNavigate();
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -35,24 +36,14 @@ export default function Desc() {
 
 
       <div className="link">
-        {/* <a href="https://t.me/math_learn_v1_bot">
-          <div className="logo">
-            {<TelegramSvg />}
-          </div>
-          <div className="title">
-            <p>Telegram</p>
-          </div>
-        </a> */}
 
+        <button disabled={!isChecked} onClick={() => navigate('/questionnaire')}>
 
-        <button disabled={!isChecked} onClick={() => window.open('https://t.me/math_learn_v1_bot', '')}>
-          <div className="logo">
-            {<TelegramSvg />}
-          </div>
           <div className="title">
-            <p>Telegram</p>
+            <p>Записаться на консультацию</p>
           </div>
         </button>
+
       </div>
     </section>
   )

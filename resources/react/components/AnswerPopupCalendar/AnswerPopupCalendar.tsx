@@ -1,13 +1,6 @@
-import { useEffect } from 'react'
 import './answer_popup_calendar.scss'
 
 export default function AnswerPopupCalendar({ date, time }: { date: string, time: string }) {
-
-  useEffect(() => {
-    localStorage.setItem('record', 'true')
-    localStorage.setItem('date', date)
-    localStorage.setItem('time', time)
-  }, [])
 
   return (
     <div className='answer_popup--window'>

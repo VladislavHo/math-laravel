@@ -53,7 +53,9 @@ class AppointmentController
     }
 
 
+    Log::info( 'USER'  . $user);
 
+    Log::info( 'Questionnaire'  . $questionnaire);
     // Установка временной зоны и даты
     $date = Carbon::parse($request->date)->setTimezone('Europe/Moscow');
     $timeCarbon = Carbon::createFromFormat('H:i', $request->time);

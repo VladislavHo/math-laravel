@@ -1,27 +1,22 @@
 import { useForm, SubmitHandler } from "react-hook-form"
-
-import "./questionnaire.scss"
-
 import { FormValues } from "../../types/types";
 import { useEffect, useState } from "react";
-import AnswerPopupQuestionnaire from "../AnswerPopupQuestionnaire/AnswerPopupQuestionnaire";
 import { observer } from "mobx-react-lite";
-import UserStore from "../../store/user_store";
-import ErrorPopup from "../ErrorPopup/ErrorPopup";
 import Select from "react-select";
 import { OPTION_COUNTRY_CODES } from "../../config/config";
 import { customStyles } from "./styles";
-import { getAnalyticsQuestionnaire, getAnalyticsIsPay } from "../../api/analyticsApi";
+import { createUser } from "../../hook/createOrUpdateUser";
+import { updateUserByApi } from "../../api/userApi";
+import AnswerPopupQuestionnaire from "../AnswerPopupQuestionnaire/AnswerPopupQuestionnaire";
 
+import "./questionnaire.scss"
 // import { useNavigate } from 'react-router-dom';
 
 
 
 const Questionnaire = observer(() => {
-  const id = localStorage.getItem('id');
-  const { createUserActions, errorUserData } = UserStore
+
   const [isActive, setIsActive] = useState(false);
-  const [isPayment, setIsPayment] = useState(false); //false
   const [isLoading, setIsLoading] = useState({
     success: false,
     error: false
@@ -32,26 +27,21 @@ const Questionnaire = observer(() => {
 
 
 
+
+
   function setCountryNumber(newValue: unknown) {
     const option = newValue as { value: string; label: string };
     setSelectedOption(option.label)
   }
 
   useEffect(() => {
-    setIsPayment(Math.random() < 0.5)
 
 
-    getAnalyticsQuestionnaire(id ?? '')
-
-
-
+    createUser({ pages: 'is_questionnaires', id: localStorage.getItem('id')! })
 
   }, [])
 
-  useEffect(() => {
-    getAnalyticsIsPay(id ?? '', isPayment)
-  }, [isPayment])
-
+  console.log(localStorage.getItem('id'), 'LOCALSTORAGE')
   const {
     register,
     handleSubmit,
@@ -60,29 +50,30 @@ const Questionnaire = observer(() => {
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     const fullPhoneNumber = `${selectedOption} ${data.phone}`;
 
-    const user = { ...data, id: id ?? '', phone: fullPhoneNumber }
-
+    const user = { ...data, id: localStorage.getItem('id')!, phone: fullPhoneNumber }
+    console.log(user)
 
     setIsLoading({ ...isLoading, success: true })
-    await createUserActions(user)
+    await updateUserByApi(user)
       .then(() => setIsLoading({ ...isLoading, success: false }))
       .catch(() => setIsLoading({ ...isLoading, error: true }))
+
     setIsActive(true)
 
   };
 
   return (
-    <>
+    <>      {
+      // errorUserData && (
+      //   <ErrorPopup message="Произошла ошибка при создании анкеты. Обновите страницу или повторите попытку позже" />
+      // )
+    }
       {
-        errorUserData && (
-          <ErrorPopup message="Произошла ошибка при создании анкеты. Обновите страницу или повторите попытку позже" />
+        isActive && !isLoading.success && (
+          <AnswerPopupQuestionnaire />
         )
       }
-      {
-        isActive && !isLoading.success && !errorUserData && (
-          <AnswerPopupQuestionnaire isPayment={isPayment} userID={id} />
-        )
-      }
+
       <section className="questionnaire">
         <h2 style={{ maxWidth: "640px" }}>Анкета для записи на консультацию и тестирование от команды MathPad</h2>
         <p className="description-red">Анкета предназначена для родителей школьников</p>
@@ -126,7 +117,7 @@ const Questionnaire = observer(() => {
             </label>
             <input
               type="text"
-              {...register('telegram_name', { required: 'Это поле обязательно', minLength: 2, maxLength: 15})}
+              {...register('telegram_name', { required: 'Это поле обязательно', minLength: 2, maxLength: 15 })}
               placeholder="Поле ввода"
             />
             {errors.telegram_name && <span className="error-message">{errors.telegram_name.message}</span>}
@@ -268,17 +259,6 @@ const Questionnaire = observer(() => {
             />
             {errors.deadline && <span className="error-message">{errors.deadline.message}</span>}
           </div>
-
-          {/* <div className="plans-field field">
-            <label className="label-title">Дальнейшие академические и карьерные планы для вашего ребенка</label>
-            <input
-              type="text"
-              {...register('plans', { minLength: 3, maxLength: 50 })}
-              placeholder="Поле ввода"
-            />
-            {errors.plans && <span className="error-message">{errors.plans.message}</span>}
-          </div> */}
-
 
           <div className="age-field field">
             <label className="label-title">Возраст вашего ребенка/ваш*</label>

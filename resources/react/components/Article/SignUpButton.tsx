@@ -1,8 +1,8 @@
-export default function SignUpButton({ id }: { id: string }) {
+export default function SignUpButton() {
   return (
     <>
       <div className="signup--button">
-        <a href={`/${id}/questionnaire`}>Записаться!</a>
+        <a href={`/questionnaire`}>Записаться!</a>
       </div>
     </>
   )

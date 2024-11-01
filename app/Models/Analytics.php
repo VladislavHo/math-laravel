@@ -11,7 +11,7 @@ class Analytics extends Model
 
     protected $fillable = [
         'user_id',
-        'is_learning',
+        'is_leanding',
         'is_telegram_bot',
         'is_subscribed_telegram',
         'is_article',

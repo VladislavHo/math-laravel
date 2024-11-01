@@ -2,12 +2,12 @@
 
 // namespace App\Http\Controllers\UserController;
 namespace App\Http\Controllers;
+
 use App\Models\Analytics;
 use App\Models\User;
 use App\Models\Questionnaire;
 use Illuminate\Http\Request;
-use Log;
-use Symfony\Component\Console\Question\Question;
+use Illuminate\Support\Facades\Log;
 class UserController
 {
   //
@@ -21,76 +21,106 @@ class UserController
       'status' => '200',
     ]);
   }
+
+
   public function create(Request $request)
   {
+    $pages = $request->pages;
+    $id = $request->id;
 
-    try {
 
-      $user = User::where('id', $request->id);
 
-      Questionnaire::where('user_id', $request->id)->update(
-        [
-          'name' => $request->name,
-          'lastName' => $request->lastName,
-          'age' => $request->age,
-          'country' => $request->country,
-          'phone' => $request->phone,
-          'email' => $request->email,
-          'tasks' => $request->tasks,
-          'deadline' => $request->deadline,
-          'investment' => $request->investment
-        ]
-      );
+    $user = User::where('id', $id)->first();
 
-      $questionnaire = Questionnaire::where('user_id', $request->id)->first();
-      if ($questionnaire->telegram_name == null) {
-        $telegramName = $request->telegram_name;
-        $cleanedName = str_replace('@', '', $telegramName);
-        $questionnaire->update([
-          'telegram_name' => $cleanedName 
+    if($user) {
+
+      $analytics = $user->analytics();
+
+
+      if($analytics) {
+        $analytics->update([
+          $pages => 1,
         ]);
-      }
-
-      Analytics::where('user_id', $request->id)->update(
-        [
-          "is_questionnaires_passed" => true
-        ]
-      );
-
-      if ($user) {
 
         return response()->json([
           'data' => $user,
           'status' => '200',
-        ]);
-      } else {
-
-        return response()->json([
-          'data' => $user,
-          'status' => '404',
+          'message' => 'Пользователь обновлен',
         ]);
       }
+    }
 
-    } catch (\Exception $e) {
+
+    $newUser = User::create();
+
+    if($newUser) {
+
+
+
+     $analytics = Analytics::updateOrCreate(
+      ['user_id' => $newUser->id],
+      [$pages => 1]
+  );
+
+
+
       return response()->json([
-        'data' => $e->getMessage(),
-        'status' => '500',
+        'data' => $newUser,
+        'status' => '200',
+        'message' => 'Пользователь создан',
       ]);
     }
-  }
-
-  public function update(Request $request, $id)
-  {
-    $user = User::find($id);
-
-    $user->update($request->all());
-
 
 
     return response()->json([
-      'data' => $user,
-      'status' => '200',
+      'data' => null,
+      'status' => '400',
+      'message' => 'Пользователь не создан',
     ]);
+
+  }
+
+
+  public function update(Request $request)
+  {
+      try {
+          // Поиск пользователя по ID
+          $user = User::find($request->id);
+  
+  
+          // Обновление анкеты
+         Questionnaire::updateOrCreate(
+              ['user_id' => $user->id],
+              [
+                  'name' => $request->name,
+                  'lastName' => $request->lastName,
+                  'age' => $request->age,
+                  'country' => $request->country,
+                  'phone' => $request->phone,
+                  'email' => $request->email,
+                  'tasks' => $request->tasks,
+                  'deadline' => $request->deadline,
+                  'investment' => $request->investment,
+                  'telegram_name' => $request->telegram_name ? str_replace('@', '', $request->telegram_name) : null,
+              ]
+          );
+  
+          // Обновление аналитики
+          Analytics::where('user_id', $user->id)->update([
+              "is_questionnaires_passed" => true
+          ]);
+  
+          // Возврат успешного ответа
+          return response()->json([
+              'data' => $user,
+              'status' => '200',
+          ]);
+      } catch (\Exception $e) {
+          return response()->json([
+              'data' => $e->getMessage(),
+              'status' => '500',
+          ]);
+      }
   }
 
   public function getAppointmentsByUser(Request $request)
@@ -101,5 +131,4 @@ class UserController
       'status' => '200',
     ]);
   }
-
 }

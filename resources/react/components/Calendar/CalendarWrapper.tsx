@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 
-import 'react-calendar/dist/Calendar.css';
-import './calendar.scss';
 import { MAX_CALENDAR_DATE } from '../../config/config';
 import { observer } from 'mobx-react-lite';
-import UserStore from '../../store/user_store';
 import DateStore from '../../store/date_store';
 import AnswerPopupCalendar from '../AnswerPopupCalendar/AnswerPopupCalendar';
 import { useNavigate } from 'react-router-dom';
-import { checkPayment, checkPaymentStripe } from '../../api/payApi';
-import { TelegramSendMessage } from '../../api/telegramApi';
-import ErrorPopup from '../ErrorPopup/ErrorPopup';
+
+import generateTimeOptions from '../../hook/generateTimeOptions';
+import { addedWithUserAppointment } from '../../api/userApi';
+
 import { getAnalyticsCalendar } from '../../api/analyticsApi';
 
+import { TelegramSendMessage } from '../../api/telegramApi';
 
 type ValuePiece = Date | null;
 
 type Value = ValuePiece | [ValuePiece, ValuePiece];
+import 'react-calendar/dist/Calendar.css';
+import './calendar.scss';
+
 
 const CalendarWrapper = observer(() => {
+  const id = localStorage.getItem('id')!;
   const navigation = useNavigate()
-  const id = localStorage.getItem('id') ?? '';
-  const payment_id = localStorage.getItem('payment_id') ?? '';
-  const paymethod = localStorage.getItem('paymethod') ?? '';
-  const { addedWithUserAppointmentActions, errorUserData } = UserStore
+
+  // const { addedWithUserAppointmentActions, errorUserData } = UserStore
   const { getDatesActions, dateAppointement } = DateStore
 
   const [isOpenPopup, setIsOpenPopap] = useState(false);
@@ -37,34 +38,28 @@ const CalendarWrapper = observer(() => {
   const [newValue, setNewValue] = useState<Value | null>(null);
 
 
+
   useEffect(() => {
-
-    if (!paymethod) {
-      navigation('/')
-    }
-
-
     const moundhPonel = document.querySelector(".react-calendar__navigation__label");
     moundhPonel?.setAttribute('disabled', 'true');
 
     getDatesActions()
-    getAnalyticsCalendar(id)
 
-
-    console.log(dateAppointement, 'DATEAPPOINTEMENT')
-
-    if (!!String(id) && !!String(payment_id)) {
-      checkPayment(id, payment_id)
-    }
-
-    if (!!String(id) && !!String(paymethod) && paymethod === 'stripe') {
-      checkPaymentStripe({ userID: id })
-    }
-
+    checkDataCalendar(id)
 
   }, [])
 
 
+
+
+
+
+  async function checkDataCalendar(id: string) {
+    const data = await getAnalyticsCalendar({ id })
+    if (data.status === 400) {
+      navigation('/questionnaire')
+    }
+  }
 
 
   function onClickDay() {
@@ -87,34 +82,29 @@ const CalendarWrapper = observer(() => {
     );
   };
 
-  function handleClickSubmit(date: Date) {
-
-    localStorage.removeItem('paymethod')
+  async function handleClickSubmit(date: Date) {
 
     setIsLoading({ ...isLoading, success: true })
-    handleClickAppointment(date)
-    .then(() => {
-      setIsLoading({ ...isLoading, success: false })
-    })
-    .catch(() => {
-      setIsLoading({ ...isLoading, error: true })
-    })
-
+    await handleClickAppointment(date)
+      .then(() => {
+        setIsLoading({ ...isLoading, success: false })
+      })
+      .catch(() => {
+        setIsLoading({ ...isLoading, error: true })
+      })
 
     setIsOpenPopap(true)
-
-
   }
 
 
 
   async function handleClickAppointment(value: Date) {
     try {
+      console.log(value)
+      await addedWithUserAppointment({ date: value, time: selectedTime, id: id ?? '' })
 
-      await addedWithUserAppointmentActions({ date: value, time: selectedTime, id })
-      if(!errorUserData) {
-        TelegramSendMessage({ date: value, time: selectedTime, user_id: id })
-      }
+      await TelegramSendMessage({ date: value, time: selectedTime, user_id: id })
+
 
 
     } catch (error) {
@@ -122,16 +112,7 @@ const CalendarWrapper = observer(() => {
     }
   }
 
-  const generateTimeOptions = () => {
-    const options = [];
-    for (let hour = 9; hour <= 16; hour++) {
-      for (const minute of [0, 30]) {
-        const time = `${hour}:${minute < 10 ? '0' : ''}${minute}`;
-        options.push(time);
-      }
-    }
-    return options;
-  };
+
 
   const handleChangeTime = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedTime(event.target.value);
@@ -141,13 +122,7 @@ const CalendarWrapper = observer(() => {
   return (
     <div className='calendar--wrapper'>
 
-      {
-        errorUserData && (
-          <ErrorPopup message='Произошла ошибка. Обновитье страницу или напишите на почту: zhborodaeva@gmail.com' />
-        )
-      }
-
-      {isOpenPopup && !isLoading.success && !errorUserData && (
+      {isOpenPopup && !isLoading.success && (
         <AnswerPopupCalendar date={new Date(date as Date).toLocaleDateString()} time={selectedTime} />
       )}
       <div className="title">
@@ -199,3 +174,5 @@ const CalendarWrapper = observer(() => {
 
 
 export default CalendarWrapper
+
+

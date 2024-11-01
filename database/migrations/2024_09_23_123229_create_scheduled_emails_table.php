@@ -12,10 +12,10 @@ return new class extends Migration {
     {
         Schema::create('scheduled_emails', function (Blueprint $table) {
             $table->id();
-            $table->string('recipient'); // Email получателя
-            $table->text('message');      // Содержимое сообщения
-            $table->timestamp('send_at'); // Дата и время отправки
-            $table->timestamps();          // created_at и updated_at
+            $table->string('recipient'); 
+            $table->text('message');      
+            $table->timestamp('send_at'); 
+            $table->timestamps();
         });
     }
 
